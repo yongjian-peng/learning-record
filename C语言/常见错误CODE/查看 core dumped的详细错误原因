@@ -1,0 +1,42 @@
+## 什么是 core dump?
+- core 的意思是内存 dump 的意思是扔出来，堆出来
+- 开发和使用 Unix 程序时，有时候莫名其妙的 down 了 (段错误(吐核)) 却没有任何的提示，
+- 这时候可以查看一下 有没有 core.进程号的文件生成，这个文件便是操作系统把程序down掉时的内存内容扔出来生成的，它可以作为调试程序的参考
+- core dump 又叫核心转储，当程序运行过程中发生异常，程序退出时，由操作系统把程序当前的内存状况存储再一个core文件中，叫 core dump
+
+### 段错误原因有哪些？
+- 解引用空指针
+- 访问不可访问的内存空间（如内核空间）
+- 访问不存在的内存地址
+- 试图写一个只读内存空间
+- 栈溢出（函数递归调用太深）
+- 使用未初始化的指针（定义时没有初始化或者已经收回）
+
+### 如何使用core文件？
+- gdb -c core文件路径 [应用程序的路径]
+- 进入输入where回车 就可以显示程序在哪一行宕掉的，在那个函数中
+![avatar](./image/Snipaste_2023-04-27_15-59-46.png)
+
+
+
+```
+#include <stdio.h>
+
+/**
+ * 段错误demo 
+ */
+int main(void) {
+    printf("core.c\r\n");
+    int *core = NULL;
+    *core = 1;
+    printf("%d\n", *core);
+    return 0;
+}
+```
+
+### 如何生成 core 文件
+- 设置 ulimit -c unlimited
+- 查看 ulimit -a 中 core file size          (blocks, -c) unlimited
+- data seg size           (kbytes, -d) unlimited 即可
+- 再次运行程序便生成了 core 文件
+- core 文件生成位置一般和运行程序路径相同，文件名为 core.进程号 例如：core.7015
