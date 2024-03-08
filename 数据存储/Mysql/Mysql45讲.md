@@ -1,0 +1,106 @@
+### Mysql45讲记录
+
+- 1 两阶段提交 redo_log 和 bin_log  配置成双一模式。保证数据丢失的少，
+- 2 事务隔离级别，读未提交，读提交，可重复读，可串行化。
+- 3 加索引的时候，覆盖索引，最左匹配原则 索引可以添加多个唯一索引， 删除索引添加索引能够数据页重新排列。
+- 4 读写锁应用，再表 ddl 时候，读锁不互斥，读写锁在读锁就会互斥。
+- 5 InnoDb 里面每个事务有一个唯一的事务ID, 叫作 transaction id. , transaction id 赋值给这个数据版本的事务ID,记为 row trx_id 
+- 6 update 语句更新时当前读，select语句如果是加锁，也是当前读。
+- 7 lock in share mode S锁 共享锁 for update X锁 排他锁 select * from t where id = 1 for update ......
+    事务更新 多个事务之间的 读取 MVCC 多版本区别
+- 8 唯一索引和普通索引的应用，change_buffer 普通索引更新的时候能够使用到 change_buffer 唯一索引时候更新使用不了，适合的场景，对于写多读少的业务，写完- 后，马上被方访问的概率比较小，例如账单类，日志类的系统。
+- 9 排序，全字段排序和rowid 排序 内存够大的情况使用全字段排序，内存不够的情况下，使用rowid，排序后再回表查询结构。可以加索引，最好使用覆盖索引，可以考- 虑使用临时表来优化
+
+
+#### 10 Mysql为什么有的时候会选错索引
+- show index from t10; 查看索引的区分度，查询语句时候，有另外一个线程在删除数据，引擎会扫描错行数，导致不走索引
+- analyze table t 命令恢复的 重新统计索引信息 过程或加入MDL 读锁的。
+- ![avatar](../image/image.png)
+- 纠正索引的速度会快将近50倍
+- between + order by 索引选错的情况下，可以来优化, between 选择大的区间来做索引。
+- 
+  - select * from (select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 100)alias limit 1;
+  - select * from t where a between 1 and 1000 and b between 50000 and 100000 order by b, a limit 1;
+
+#### 11 怎么给字符串加索引
+```bash
+mysql> select 
+  count(distinct left(email,4)）as L4,
+  count(distinct left(email,5)）as L5,
+  count(distinct left(email,6)）as L6,
+  count(distinct left(email,7)）as L7,
+from SUser;
+```
+- 检查字符串的区分度，字符串使用前缀长度。缺点是，不能使用覆盖索引。
+
+#### 12 为什么我的MySQL会“抖”一下
+-  innodb_io_capacity innodb 刷脏页的配置 ， 脏页比，可以计算出来。innodb_flush_neighbors 刷脏页时候，是否顺带邻居。
+
+#### 13 为什么表数据删掉一班，表文件大小不变
+- Innodb删除数据，就标记删除，插入数据情况也会分页的情况，有数据空洞。重新创建表，可以解决表大小问题。Online 使用工具 Github->gh-ost 来完成
+
+
+
+14 | count(*)这么慢，我该怎么办？
+
+15 | 答疑文章（一）：日志和索引相关问题
+
+16 | “order by”是怎么工作的？
+
+17 | 如何正确地显示随机消息？
+
+18 | 为什么这些SQL语句逻辑相同，性能却差异巨大？
+
+19 | 为什么我只查一行的语句，也执行这么慢？
+
+20 | 幻读是什么，幻读有什么问题？
+
+21 | 为什么我只改一行的语句，锁这么多？
+
+22 | MySQL有哪些“饮鸩止渴”提高性能的方法？
+
+23 | MySQL是怎么保证数据不丢的？
+
+24 | MySQL是怎么保证主备一致的？
+
+25 | MySQL是怎么保证高可用的？
+
+26 | 备库为什么会延迟好几个小时？
+
+27 | 主库出问题了，从库怎么办？
+
+28 | 读写分离有哪些坑？
+
+29 | 如何判断一个数据库是不是出问题了？
+
+30 | 答疑文章（二）：用动态的观点看加锁
+
+31 | 误删数据后除了跑路，还能怎么办？
+
+32 | 为什么还有kill不掉的语句？
+
+33 | 我查这么多数据，会不会把数据库内存打爆？
+
+34 | 到底可不可以使用join？
+
+35 | join语句怎么优化？
+
+36 | 为什么临时表可以重名？
+
+37 | 什么时候会使用内部临时表？
+
+38 | 都说InnoDB好，那还要不要使用Memory引擎？
+
+39 | 自增主键为什么不是连续的？
+
+40 | insert语句的锁为什么这么多？
+
+41 | 怎么最快地复制一张表？
+
+42 | grant之后要跟着flush privileges吗？
+
+43 | 要不要使用分区表？
+
+44 | 答疑文章（三）：说一说这些好问题
+
+45 | 自增id用完怎么办？
