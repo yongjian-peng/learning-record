@@ -1,7 +1,22 @@
 ### Explain 详解
 - 引用：https://zhuanlan.zhihu.com/p/623125075?utm_id=0
 
+列名	描述
+id	在一个大的查询语句中每个SELECT关键字都对应着一个唯一的id
+select_type	SELECT关键字对应查询的类型
+table	表名
+partitions	匹配的分区信息
+type	针对单表的访问方法
+possible_keys	可能使用到的索引
+key	实际使用的索引
+key_len	实际使用到的索引长度
+ref	当使用索引列等值查询的时候，与索引列进行等值匹配的对象信息
+rows	预估需要读取的记录条数
+filtered	某个表经过搜索条件过滤后剩余记录条数的百分比
+Extra	一些额外的信息
 
+
+完整的访问方法如下：system > const > eq_ref > ref > fulltext > ref_or_null > index_merge > unique_subquery > index_subquery > range > index > all，越靠前代表效率越高
 
 #### 创建表
 ```bash
