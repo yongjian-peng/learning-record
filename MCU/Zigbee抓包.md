@@ -40,7 +40,23 @@
 
 ![image-20250611205401042](D:\WorkSpace\Git\learning-record\MCU\assets\image-20250611205401042.png)
 
+1  PHY 物理层 实现频率选择、调制、发送/接收信号（基于 IEEE 802.15.4）
+
+2  MAC 层  介质访问控制：信道访问、帧传输、重试等
+
+3  NWK 网络层 路由选择、网络地址分配、拓扑控制
+
+4  APS 支持层 数据封装、会话管理、安全处理
+
+5  ZDO/ZDP 管理层 设备发现、绑定、网络加入、设备角色定义
+
+6  应用对象（Application）  用户逻辑、Cluster 命令、设备行为定义（如灯泡开关）
+
+ZDO: 它运行在 APS 层之上，辅助设备发现、加入、绑定等控制行为.在实际调试 Zigbee 网络时，ZDO 报文是诊断设备间连接逻辑的重要线索
+
 #### 1.协调器广播包：允许设备入网
+
+
 
 ![image-20250612110158655](D:\WorkSpace\Git\learning-record\MCU\assets\image-20250612110158655.png)
 
@@ -119,3 +135,81 @@ ZCL 是 zigbee 3.0 的核心
 
 1. 相关涉及到的key NWK Key  
 2. Link Key 
+
+
+
+#### zigbee Packet Information 命令
+
+##### Packet Information Identify: Identify Query 是什么意思 命令： 0x01
+
+**Identify** = “让我亮起来” → 设备开始闪灯或发出声响，用于人找设备。
+
+**Identify Query** = “谁在亮？” → 控制器/中控发送这个命令，查询哪些设备正在执行 Identify 动作。
+
+| 命令 | 命令 ID | 方向 | 描述 |
+| ---- | ------- | ---- | ---- |
+|      |         |      |      |
+
+| **Identify** | `0x00` | C → S | 要求设备执行 Identify（闪灯、响铃） |
+| ------------ | ------ | ----- | ----------------------------------- |
+|              |        |       |                                     |
+
+| **Identify Query** | `0x01` | C → S | 查询当前是否有设备在执行 Identify |
+| ------------------ | ------ | ----- | --------------------------------- |
+|                    |        |       |                                   |
+
+| **Identify Query Response** | `0x00` | S → C | 回复正在 Identify 的剩余时间（单位：秒） |
+| --------------------------- | ------ | ----- | ---------------------------------------- |
+|                             |        |       |                                          |
+
+##### Packet Information：Simple Descriptor Resquest Layer: ZDP 什么意思
+
+​	Zigbee 报文中一种典型的 **ZDP（Zigbee Device Profile）层命令**，用于设备发现阶段
+
+​	响应：Simple Descriptor Response  
+
+​		输入 Cluster 列表（Input Clusters）输出 Cluster 列表（Output Clusters）
+
+##### Packet Information：Beacon Request Layer: MAC 什么意思
+
+​	这表示 Zigbee 协议栈中，在 **MAC 层（物理通信层）** 发送的一种特殊广播帧，用于发起 **网络扫描（network discovery）**，目的是请求周围 Zigbee 网络广播它们的 **Beacon（信标）信息**
+
+​	Command ID `0x07`（Beacon Request）
+
+​        Destination 广播地址（通常是 0xFFFF）
+
+##### Packet Information：Data Request Layer: MAC 什么意思
+
+​	这是在 Zigbee 抓包或协议分析中常见的一条 **MAC 层帧**，表示一个设备在 **请求父设备传输缓存的数据**
+
+##### Packet Information：Link Status: 0x0 Layer: NWK 什么意思
+
+​	**Link Status** 是 Zigbee 网络层的一种“路由控制帧”，**仅由具有路由能力的设备（Coordinator / Router）定期广播** 告诉邻居：“我还在线，而且这是我邻居列表的状态”
+
+
+
+#### 通信中的key
+
+Network Key:       网络统一密钥，用于所有节点 NWK 加密
+
+Link Key:        特定设备对之间的点对点密钥，用于 APS 加密
+
+Trust Center Link Key:  设备与 Trust Center 的专属密钥
+
+
+
+#### 入网流程：
+
+​	下面是一个 Zigbee 终端设备典型的入网顺序：
+
+​	终端广播 Beacon Request；
+
+​	协调器回复 Beacon（可能带有 NwkOpen）；
+
+​	终端发送 Association Request；
+
+​	协调器发送 Association Response（加密）；
+
+​	若密钥正确，终端加入网络；
+
+​	否则就会看到 Unable to decrypt Data。
