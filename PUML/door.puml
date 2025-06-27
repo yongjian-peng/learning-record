@@ -33,7 +33,7 @@ BACK -> BACK: IVLOCK_DRIVER_ACTION_ADD_USER \n ivlock_back_req_add_key()添加�
 BACK -> Font: IVLOCK_CMD_ADD_KEY_REQ: ADD KEY
 
 Font -> Font: iviews_backlock_add_key_req() \n req:3 keys:256 per :1 \n 切换模式：IVLOCK_MODE_FOR_ADD_USER \n key->valid!=IVKEY_VALID 不是有效密钥 \n 添加人脸和添加指纹都是在这里
-alt#Gold #LightBlue Successful case
+alt#Gold #LightBlue 添加人脸
 Font -> Font: iviews_face_req_reset_status()添加人脸 \n face_hdl.status = 3 \n 注册状态，设备正在进行指纹注册,取消指纹 
 
 Font -> Font: iviews_face_enroll_delay_exit 添加人脸 \n 1200毫秒后，iviews_face_req_enroll 用户注册 \n iviews_face_recv_data_callback 打开函数中，回调函数 
@@ -76,7 +76,7 @@ note right: 发起添加密钥请求:指纹
 
 
 
-else #Pink Failure
+else #Pink 添加指纹
 Font -> Font: 添加指纹
 end
 
