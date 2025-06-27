@@ -1,0 +1,94 @@
+
+@startuml
+participant 摄像头 as VGA
+participant 前板 as Font
+participant 后板 as BACK
+title 交互流程图
+autonumber
+BACK -> BACK: IVIEWS_KEY_TYPE_UNLOCK 单键
+note right: 添加人脸过程
+BACK -> BACK:  iviews_unlock_action_handle \n -> IVIEWS_KEY_ACTION_LONG2S \nlock_hdl.user_state.add_stage = IVLOCK_ADD_SEQ_FACE
+BACK -> Font:  IVLOCK_CMD_VERIFY_MODE_REQ
+
+Font -> Font: iviews_backlock_verify_mode_req()验证
+
+Font -> Font: iviews_face_req_verify 执行验证人脸
+
+Font -> VGA: SENSETIME_CMD_VERIFY
+
+VGA -> Font: iviews_face_verify_resp_handle
+
+Font --> BACK: IVLOCK_CMD_VERIFY_REQ \n   响应验证结果 \n type:8 id:1 len:31
+
+BACK -> BACK: 清除iviews_lock_key_err_timeout_cancel
+
+BACK -> Font: IVLOCK_CMD_VERIFY_RESP
+
+Font -> Font: 接收参数 \n for:2 err:0 type:8 uid:1 kid:1 per:0 \n 模式：IVLOCK_MODE_FOR_WAIT_VERIFY
+
+Font --> BACK: IVLOCK_CMD_VERIFY_MODE_RESP \n ivlock_front_verify_mode_resp_handle() \n  for:2 err:0 \n 执行管理员验证成功，准备录入
+
+BACK -> BACK: IVLOCK_DRIVER_ACTION_ADD_USER \n ivlock_back_req_add_key()添加普通用户 \n add_stage = IVLOCK_ADD_SEQ_FACE \n req :2  \n ivlock_front_req_add_key:IVLOCK_ADD_KEY_REQ_ADD_BACK:3
+
+BACK -> Font: IVLOCK_CMD_ADD_KEY_REQ: ADD KEY
+
+Font -> Font: iviews_backlock_add_key_req() \n req:3 keys:256 per :1 \n 切换模式：IVLOCK_MODE_FOR_ADD_USER \n key->valid!=IVKEY_VALID 不是有效密钥 \n 添加人脸和添加指纹都是在这里
+alt#Gold #LightBlue Successful case
+Font -> Font: iviews_face_req_reset_status()添加人脸 \n face_hdl.status = 3 \n 注册状态，设备正在进行指纹注册,取消指纹 
+
+Font -> Font: iviews_face_enroll_delay_exit 添加人脸 \n 1200毫秒后，iviews_face_req_enroll 用户注册 \n iviews_face_recv_data_callback 打开函数中，回调函数 
+
+Font -> Font: iviews_face_send_req：IVFACE_REQ_ENROLL 注册请求
+
+Font -> Font: iviews_face_status_callback_ex \n IVFACE_STATUS_ENROLL_DIR
+Font -> Font: iviews_face_status_data_callback \n iviews_face_enroll_dir_handle
+
+Font --> BACK: IVLOCK_CMD_ENROLL_REQ \n iviews_face_status_data_callback \n 收到注册成功的消息 \n  iviews_face_enroll_result_handle
+
+BACK -> BACK: ivlock_front_enroll_req_handle \n 处理注册请求 \nerr :0 , type :8
+
+BACK -> BACK: ivlock_profile_enroll \n 写入Flash文件 \n success uid:8 kid:5 type:8 per:1
+
+BACK --> Font: IVLOCK_CMD_ENROLL_RESP
+
+Font -> Font: iviews_backlock_enroll_resp \nerr:0 uid:8 kid:5 type:8 \nadd_req :3
+note left: 注册结果响应到前板
+
+Font -> Font: iviews_lock_add_key_resp \na:3 r:3 err:0 \nreq:3 err:0 \n修改 main_hdl.add_req = IVLOCK_ADD_KEY_REQ_NONE
+
+Font -> BACK: IVLOCK_CMD_ADD_KEY_RESP
+
+BACK -> BACK: ivlock_front_add_key_resp_handle \nerr :0 type:8  req :3 lock_hdl.enroll_stage:2 \n
+note right: 注册结果播报注册结果
+
+BACK -> BACK: ivlock_add_user_next_stage_handle \nerr :0 type:8  req :3 lock_hdl.enroll_stage:2 \n
+note right: 成功后继续下一项
+
+BACK -> BACK: ivlock_add_key_to_user \nreq:0 err:0 user_for:0 id:8 perm:1 cnt_key:3 \n
+note right: 添加新的 key（如指纹、人脸）到指定用户下
+
+BACK -> BACK: IVLOCK_ADD_KEY_REQ_ADD_BACK \n 
+
+BACK -> Font: IVLOCK_CMD_ADD_KEY_REQ \n ivlock_front_req_add_key
+note right: 发起添加密钥请求:指纹
+
+
+
+
+
+else #Pink Failure
+Font -> Font: 添加指纹
+end
+
+== 录入人脸 ==
+
+newpage
+
+BACK -> Font: 按键按下2秒
+note right: 添加人脸过程
+
+newpage A title for the\nlast page
+
+
+
+@enduml
