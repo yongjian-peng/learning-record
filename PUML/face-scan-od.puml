@@ -15,8 +15,13 @@ note left: 人脸识别
 BACK -> Font:  SENSETIME_CMD_ENROLL \n -> iviews_face_enroll_resp_handle \n STATUS = IVFACE_STATUS_ENROLL 5
 note left: 接收到的命令
 
-Font -> BACK:  ivlock_front_verify_driver_action_handle \n FOR :1 
+Font -> BACK:  ivlock_front_verify_driver_action_handle \n FOR :1 \nIVLOCK_ADD_KEY_REQ_CANCEL_BACK \n
 note left: 配网模式中
+
+BACK -> Font:  IVLOCK_CMD_ADD_KEY_REQ \nIVLOCK_ADD_KEY_REQ_CANCEL_BACK 退出配网模式
+note left: 配网模式中
+
+
 
 BACK -> Font:  SENSETIME_CMD_ENROLL \n -> iviews_face_enroll_resp_handle \n STATUS = IVFACE_STATUS_ENROLL 5
 note left: 接收到的命令

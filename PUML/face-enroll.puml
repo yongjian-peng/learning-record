@@ -34,7 +34,7 @@ note left: 接收到的命令
 Font -> BACK:  SENSETIME_CMD_ENROLL \n -> iviews_face_enroll_resp_handle \n STATUS = IVFACE_STATUS_ENROLL 5 \n SENSETIME_CMD_ENROLL \n dir: SSFACE_DIRECTION_UP 0x10 
 note left: 如果步骤不是 0 \n则继续验证人脸 \n发送向上微微转头
 
-BACK -> Font:  SENSETIME_CMD_ENROLL \n -> iviews_face_enroll_resp_handle \n STATUS = IVFACE_STATUS_ENROLL 5 \n 回调 \n 设置状态为空闲状态
+BACK -> Font:  SENSETIME_CMD_ENROLL \n -> iviews_face_enroll_resp_handle \n STATUS = IVFACE_STATUS_ENROLL 5 \n 回调 \n 设置状态为空闲状态   
 note left: 接收到的命令 \n 状态是0 
 
 
