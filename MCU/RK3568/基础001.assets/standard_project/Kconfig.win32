@@ -1,0 +1,298 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+mainmenu "Project Configuration"
+
+config CTRLBOARD
+    bool
+    default y
+    select HAVE_LCD
+    select HAVE_GRAPHICS
+    select HAVE_AUDIO
+
+config CMAKE_SOURCE_DIR
+	string
+	option env="CMAKE_SOURCE_DIR"
+
+config RAM_SIZE
+    default "0x4000000"
+
+config WATCHDOG_ENABLE
+    def_bool y
+
+config FONT_FILENAME
+    default "wqyMicroHeiProportional.ttf"
+
+config BACKLIGHT_ENABLE
+    def_bool y
+
+config BACKLIGHT_DUTY_CYCLES
+    default "95, 92, 88, 82, 75, 65, 55, 40, 25, 5"
+
+config BACKLIGHT_DEFAULT_DUTY_CYCLE
+    default "5"
+
+config LCD_ENABLE
+    def_bool y
+
+if !LCD_MULTIPLE
+
+config LCD_WIDTH
+    default "1280"
+
+config LCD_HEIGHT
+    default "480"
+
+config LCD_PITCH
+    default "2560"
+
+config LCD_INIT_SCRIPT
+    default "LVDS_1280_480_VESA24bits_new.txt"
+
+endif
+
+config CMDQ_ENABLE
+    def_bool y
+
+config AUDIO_ENABLE
+    def_bool y
+
+config SD0_ENABLE
+    def_bool y
+
+config FS_FAT
+    def_bool y
+
+config I2C0_ENABLE
+    def_bool y
+
+config I2S_ENABLE
+    def_bool y
+
+config I2S_SPDIF_ENABLE
+    def_bool n
+
+config UART1_ENABLE
+    def_bool y
+
+config TOUCH_ENABLE
+    def_bool y
+
+config NET_ENABLE
+    def_bool n
+
+config DEF_DBG_UART1
+    def_bool y
+
+config DEF_BUILD_DEBUG
+    def_bool y
+
+config SYSTEM_NAME
+    default "ITE Standard Project"
+
+config WIN32_SIMULATOR
+    def_bool y
+
+config FFMPEG_ENC
+    def_bool y
+
+config FFMPEG_H264_SW
+    def_bool y
+
+config ITU_FT_CACHE_ENABLE
+    def_bool y
+
+config ITU_UCL_ENABLE
+    def_bool y
+
+config BUILD_AUDIO_MGR
+    def_bool y
+
+config BUILD_INIPARSER
+    def_bool y
+
+config BUILD_ITU
+    def_bool y
+
+config BUILD_SDL
+    def_bool y
+
+config BUILD_UPGRADE
+    def_bool y
+
+config BUILD_PYINPUT
+    def_bool y
+
+if NET_ENABLE
+
+config NET_ETHERNET
+    def_bool y
+
+config NET_HTTP
+    def_bool y
+
+config BUILD_MICROHTTPD
+    def_bool y
+
+config BUILD_XML2
+    def_bool y
+
+endif
+
+source "$CMAKE_SOURCE_DIR/sdk/Kconfig"
+
+######################################################################
+# Project Menu
+######################################################################
+menu "Standard Project"
+
+    config CHECK_FILES_CRC_ON_BOOTING
+        bool "Checking files' CRC on booting time"
+        default n
+        help
+            Checking files' CRC on booting time
+        help_cht
+            開啟開機時檢查檔案 CRC 值的功能。
+        help_chs
+            开启开机时检查档案 CRC 值的功能。
+
+    config HW_VERSION
+        string "Hardware version"
+        default "V2"
+        help
+            Hardware version
+        help_cht
+            硬體版號。
+        help_chs
+            硬件版号。
+
+    config SCREENSHOT_ENABLE
+        bool "Screenshot is enabled or not"
+        default n
+        help
+            Screenshot is enabled or not
+        help_cht
+            開啟螢幕擷取功能。
+        help_chs
+            开启屏幕撷取功能。
+
+    config WEBSERVER_PORT
+        string "Web server port"
+        default "80"
+        help
+            Web server port
+        help_cht
+            網頁伺服器埠號。
+        help_chs
+            网页服务器埠号。
+
+    config ITU_PATH
+        string "ITU files path"
+        depends on !LCD_MULTIPLE
+        default "itu/1280x480"
+        help
+            ITU files path
+        help_cht
+            ITU檔案路徑。
+        help_chs
+            ITU档案路径。
+
+    config UPGRADE_FTP_URL
+        string "Upgrade ftp URL"
+        default "ftp://192.168.1.1/ctrlboard/ITEPKG03.PKG"
+        help
+            Upgrade ftp URL
+        help_cht
+            網路更新F/W路徑。
+        help_chs
+            网络更新F/W路径。
+
+    config UPGRADE_GUI
+        bool "Upgrade by graphics display"
+        depends on !LCD_MULTIPLE
+        default n
+        help
+            Upgrade by graphics display
+        help_cht
+            圖形顯示更新。
+        help_chs
+            图形显示更新。
+
+    config UPGRADE_DOWNLOAD_STORAGE
+        bool "Saving download package to temporary storage device for upgrading"
+        default n
+        help
+            Saving download package to temporary storage device for upgrading.
+        help_cht
+            存放下載的升級檔案到臨時儲存裝置。
+        help_chs
+            存放下载的升级档案到临时储存装置。
+
+    choice
+        prompt "Upgrade downloaded storage device"
+        depends on UPGRADE_DOWNLOAD_STORAGE
+        default UPGRADE_DOWNLOAD_NAND
+        help
+            Upgrade temporary storage device for downloaded package file.
+        help_cht
+            臨時存放下載的升級檔案儲存裝置
+        help_chs
+            临时存放下载的升级档案储存装置
+
+    config UPGRADE_DOWNLOAD_NAND
+        bool "NAND as downloaded storage device"
+        help
+            NAND as downloaded storage device
+        help_cht
+            臨時存放下載的升級檔案到NAND儲存裝置。
+        help_chs
+            临时存放下载的升级档案到NAND储存装置。
+
+    config UPGRADE_DOWNLOAD_NOR
+        bool "NOR as downloaded storage device"
+        help
+            NOR as downloaded storage device
+        help_cht
+            臨時存放下載的升級檔案到NOR儲存裝置。
+        help_chs
+            临时存放下载的升级档案到NOR储存装置。
+
+    config UPGRADE_DOWNLOAD_SD0
+        bool "SD0 as downloaded storage device"
+        help
+            SD0 as downloaded storage device
+        help_cht
+            臨時存放下載的升級檔案到SD0儲存裝置。
+        help_chs
+            临时存放下载的升级档案到SD0储存装置。
+
+    config UPGRADE_DOWNLOAD_SD1
+        bool "SD1 as downloaded storage device"
+        help
+            SD1 as downloaded storage device
+        help_cht
+            臨時存放下載的升級檔案到SD1儲存裝置。
+        help_chs
+            临时存放下载的升级档案到SD1储存装置。
+
+    endchoice
+
+    config UPGRADE_DOWNLOAD_POS
+        string "Downloaded saving position on temporary storage device"
+        depends on UPGRADE_DOWNLOAD_STORAGE
+        default "0x400000"
+        help
+            The position of downloaded package file in the temporary storage. It should located on the reserved area.
+            The area cannot overlap with other areas.
+
+        help_cht
+            下載的升級檔案臨時儲存裝置位置。必須放在未格式化區域，並且必須是Block Size(NOR:64kB, NAND:256kB)的倍數。
+            本區域(位置 + 升級檔案大小)不能與其它區域重疊。
+
+        help_chs
+            下载的升级档案臨時储存装置位置。必须放在未格式化区域，并且必须是Block Size(NOR:64kB, NAND:256kB)的倍数。
+            本区域(位置 + 升级档案大小)不能与其它区域重叠。
+
+endmenu
