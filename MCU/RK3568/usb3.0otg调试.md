@@ -414,7 +414,7 @@ ps aux | grep usb_otg_switch
 ls -la /sys/kernel/debug/usb/fcc00000.dwc3/mode
 
 # 检查输入设备
-ls -la /dev/input/event6
+ls -la /dev/input/event5
 
 # 手动测试模式切换
 echo "device" > /sys/kernel/debug/usb/fcc00000.dwc3/mode
