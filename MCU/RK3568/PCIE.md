@@ -33,6 +33,10 @@ CONFIG_GENERIC_MSI_IRQ_DOMAIN=y
 CONFIG_IRQ_DOMAIN=y
 CONFIG_IRQ_DOMAIN_HIERARCHY=y
 
+新增工具
+buildroot
+BR2_PACKAGE_FIO=y
+
 
 pcie30_phy_grfs
 
@@ -49,6 +53,27 @@ CONFIG_PCIEASPM_EXT=y
 CONFIG_USB_OTG_FSM=y
 CONFIG_USB_DWC3_HOST=y
 ```
+
+
+
+#### 性能测试命令
+
+```
+fio --name=seq_read_max --filename=/dev/nvme0n1 --rw=read \
+--bs=1M --numjobs=4 --iodepth=32 --runtime=30s --time_based --group_reporting
+
+说明：
+
+--numjobs=4：启用 4 个并发线程；
+
+--iodepth=32：每线程保持 32 个未完成请求（能更好利用队列深度）；
+
+这两个参数对 NVMe 非常关键，否则性能会被严重低估。
+```
+
+
+
+
 
 #### 生效 over
 
