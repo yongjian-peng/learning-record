@@ -1750,6 +1750,5 @@
 &vop_mmu {
 	status = "okay";
 };
-
 ```
 
