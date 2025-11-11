@@ -1,3 +1,5 @@
+#### 设备树 
+
 ```
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
@@ -100,7 +102,7 @@
 };
 
 &combphy2_psq {
-	
+	//rockchip,ext-refclk;
 	assigned-clock-rates = <100000000>;
 	status = "okay";
 };
@@ -230,7 +232,7 @@
 	rx_delay = <0x2f>;
 
 	phy-handle = <&rgmii_phy0>;
-	status = "disable";
+	status = "disabled";
 };
 
 &gmac1 {
@@ -351,7 +353,6 @@
 	rgmii_phy1: phy@0 {
 		compatible = "ethernet-phy-ieee802.3-c22";
 		reg = <0x0>;
-		//phy-force-master;
 	};
 };
 
@@ -365,18 +366,20 @@
 
 &pcie2x1 {
 
-	// rockchip,ext-refclk;
-
 	//phys = <&combphy2_psq PHY_TYPE_PCIE>;
-
-	reset-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>; // PCIE20_PERSTN_M1 113
+	// phy-supply = <&vcc3v3_pcie>;
+	reset-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>; // PCIE20_PERSTN_M1 113
 	wake-gpios = <&gpio2 RK_PD1 GPIO_ACTIVE_HIGH>;   // WAKEN 信号：GPIO2_D1 89
 	
 	
-	clkreq-gpios = <&gpio2 RK_PD0 GPIO_ACTIVE_LOW>; // CLKREQN 信号：GPIO2_D0 88
+	clkreq-gpios = <&gpio2 RK_PD0 GPIO_ACTIVE_HIGH>; // CLKREQN 信号：GPIO2_D0 88
 
-	pinctrl-names = "default";
+	rockchip,skip-scan-in-resume;
+	rockchip,perst-inactive-ms = <500>; /* 参考Wi-Fi模组手册，查询所需#PERST复位时间*/
+
+	//pinctrl-names = "default";
 	//pinctrl-0 = <&pcie20m1_pins>;
+	vpcie3v3-supply = <&vcc3v3_pcie>;
 
 	status = "okay";
 };
@@ -430,7 +433,7 @@
 			// output-high;
 		};
 		wifi_reset_gpio: wifi-reset-gpio {
-			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_up>; // pcfg_pull_up pcfg_pull_none
 			// output-high;
 		};
 		
@@ -481,15 +484,11 @@
 };
 
 &sata0 {
-	status = "okay";
+	status = "okay"; // okay disabled
 };
 
 &sata2 {
-	status = "disable";
-};
-
-&sdmmc1 {
-	status = "disable";
+	status = "disabled";
 };
 
 &sdmmc2 {
@@ -506,7 +505,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc2m0_bus4 &sdmmc2m0_cmd &sdmmc2m0_clk>;
 	sd-uhs-sdr104;
-	status = "disable";
+	status = "okay";
 };
 
 &spdif_8ch {
@@ -516,7 +515,7 @@
 };
 
 &uart8 {
-	status = "disable";
+	status = "disabled";
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart8m0_xfer &uart8m0_ctsn>;
 };
@@ -538,16 +537,18 @@
 };
 
 &wireless_wlan {
-	// combphy0_ps
 	compatible = "wlan-platdata";
-	wifi_chip_type = "ap6275p";
+	//wifi_chip_type = "ap6275p";
 
 	keep_wifi_power_on;
 
 	//pinctrl-names = "default";
 	//pinctrl-0 = <&wifi_host_wake_irq &wifi_reset_gpio>; //  
 	WIFI,host_wake_irq = <&gpio2 RK_PB2 GPIO_ACTIVE_HIGH>; // 74
-	WIFI,reset_gpio    = <&gpio2 RK_PB1 GPIO_ACTIVE_HIGH>; // 73
+	WIFI,poweren_gpio   = <&gpio2 RK_PB1 GPIO_ACTIVE_HIGH>; // 73 reset_gpio poweren_gpio
+
+	/* 注意：这里也需要配置wifi_reg_on管脚，给WiFi驱动来控制 */
+	//WIFI,poweren_gpio = <&gpio2 RK_PB1 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
@@ -575,6 +576,5 @@
 	BT,wake_host_irq = <&gpio2 RK_PC0 GPIO_ACTIVE_HIGH>; // 80
 	status = "okay";
 };
-
 ```
 
