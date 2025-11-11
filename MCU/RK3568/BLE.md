@@ -1,4 +1,4 @@
-配置引脚
+#### 配置引脚
 
 ```
 PCIE20_WAKEN_M1 => GPIO2_D1 89
@@ -43,7 +43,7 @@ UART1_TX_M0 => UART1_TX_M0  GPIO2_B4 76
 
 
 
-蓝牙接口初始化
+#### 蓝牙接口初始化
 
 ```
 
@@ -104,8 +104,33 @@ bluetoothctl menu gatt
 bluetoothctl pairable on
 btmon
 
-77:30:6F:0B:35:6A 
-62:FB:F2:12:A8:E1
+lspci： 检查 PCIe 网络卡
+hciconfig -a  ：显示 Bluetooth 接口（hci0）
+
+启动 Bluetooth
+bluetoothctl power on
+hciconfig hci0 up
+
+设置可发现（可选，让其他设备能找到您）
+bluetoothctl discoverable on
+
+开始扫描：
+bluetoothctl scan on
+
+BLE（低功耗）扫描：hcitool lescan
+
+停止扫描: bluetoothctl scan off
+
+配对和连接（扫描后）：
+bluetoothctl pair <MAC_ADDRESS>  # 如 bluetoothctl pair 00:11:22:33:44:55
+bluetoothctl connect <MAC_ADDRESS>
+bluetoothctl trust <MAC_ADDRESS>  # 信任设备，实现自动重连
+
+查看已配对设备
+bluetoothctl paired-devices
+
+移除设备
+bluetoothctl remove <MAC_ADDRESS>
 ```
 
 
@@ -155,6 +180,8 @@ CONFIG_BCMDHD_SDIO=y #SDIO接口，与PCIE互斥
 	gpio_direction_output 设置方向
 // brcm_patchram_plus1.c
 // bluez5-util.c 
+
+
 ```
 
 
@@ -163,41 +190,131 @@ CONFIG_BCMDHD_SDIO=y #SDIO接口，与PCIE互斥
 
 ```
 dmesg | grep brcm
+型号是：正基 AP6275P
+使用的驱动是: bcmdhd.101.10.591.95  
+固件是：clm_bcm43752a2_pcie_ag.blob fw_bcm43752a2_pcie_ag.bin 
+
+查看Wi-Fi的服务进程启动
+wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf
+
+关闭Wi-Fi
+ifconfig wlan0 down
+killall wpa_supplicant
+
+扫描热点
+wpa_cli -i wlan0 -p /var/run/wpa_supplicant scan_results
+用 wpa_cli 查看扫描结果（连接结果）：
+wpa_cli -i wlan0 scan_results
+
+#让wpa_supplicant进程重新读取上述配置，命令如下：
+wpa_cli -i wlan0 -p /var/run/wpa_supplicant reconfigure
+#发起连接：
+wpa_cli -i wlan0 -p /var/run/wpa_supplicant reconnect
+#查看连接
+wpa_cli -i wlan0 -p /var/run/wpa_supplicant status
+
+检查驱动支持情况
+iw list
+
+验证命令
+iwconfig wlan0
+iw wlan0 station dump
+iw dev wlan0 link
+
+
+
 ```
 
 
 
-
-
-#### 蓝牙模组 AP6275P 扫描教程
+#### WIFI  相关日志
 
 ```
-lspci： 检查 PCIe 网络卡
-hciconfig -a  ：显示 Bluetooth 接口（hci0）
+root@rk3568-buildroot:/# wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf 
+Successfully initialized wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf  
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+nl80211: kernel reports: Match already configured
+ctrl_iface exists and seems to be in use - cannot override it
+Delete '/var/run/wpa_supplicant/wlan0' manually if it is not used anymore
+Failed to initialize control interface '/var/run/wpa_supplicant'.
+You may have another wpa_supplicant process already running or the file was
+left by an unclean termination of wpa_supplicant in which case you will need
+to manually remove this file before starting wpa_supplicant again.
 
-启动 Bluetooth
-bluetoothctl power on
-hciconfig hci0 up
+wlan0: Do not deauthenticate as part of interface deinit since WoWLAN is enabled
+wlan0: CTRL-EVENT-DSCP-POLICY clear_all
+nl80211: deinit ifname=wlan0 disabled_11b_rates=0
 
-设置可发现（可选，让其他设备能找到您）
-bluetoothctl discoverable on
 
-开始扫描：
-bluetoothctl scan on
+#ctrl_interface接口配置
+#如果有修改的话对应wpa_cli命令-p参数要相应进行修改，wpa_cli –i wlan0 –p <ctrl_interface>
+xxx
+$ vi /etc/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant #默认不建议修改!
+ap_scan=1
+update_config=1 #这个配置使wpa_cli命令配置的热点保存到conf文件里面（wpa_cli
+save_config）
+#AP配置项
+network={
+	ssid="WiFi-AP" # Wi-Fi名字
+	psk="12345678" # Wi-Fi密码
+	key_mgmt=WPA-PSK # 加密配置，不加密则改为：key_mgmt=NONE
+}
 
-BLE（低功耗）扫描：hcitool lescan
+/// 扫描到的热点 
+root@rk3568-buildroot:/# wpa_cli -i wlan0 -p /var/run/wpa_supplicant scan
+OK
+[  590.720691] [dhd] [wlan0] wl_run_escan : LEGACY_SCAN sync ID: 1, bssidx: 0
+soot@rk3568-buildroot:/# wpa_cli -i wlan0 -p /var/run/wpa_supplicant scan_results
+bssid / frequency / signal level / flags / ssid
+48:a7:3c:f7:18:66	5260	-43	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]	YNKJ-5G
+9c:2b:a6:2d:a6:a8	5180	-57	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]	\xe9\x9d\x92\xe7\xa8\x9eDigiNeer507
+44:32:62:0f:bb:b7	5240	-63	[WPA2-PSK-CCMP][ESS]	DigiNeer507
+d8:32:14:e9:d8:ac	5200	-64	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][WPS][ESS]	OUSUYAN3949-5G
+ec:b9:70:96:fa:fc	5300	-65	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]	\xe9\x9d\x92\xe7\xa8\x9eDigiNeer507
+a2:3b:bb:16:dc:68	5180	-73	[WPA2-PSK-CCMP][WPS][ESS]	\xe5\x8d\x8e\xe4\xb8\xba\xe7\xbd\x91\xe7\xbb\x9c
+5c:e8:d3:01:3e:cd	2462	-27	[WPA2-PSK-CCMP][WPS][ESS]	HB_013ECD
+a2:3b:bb:16:dc:73	5180	-71	[WPA2-PSK-CCMP][ESS]	\xe5\x8d\x8e\xe4\xb8\xba\xe7\xbd\x91\xe7\xbb\x9c_Wi-Fi5
 
-停止扫描: bluetoothctl scan off
+// 查看连接详情
+root@rk3568-buildroot:/# wpa_cli -i wlan0 -p /var/run/wpa_supplicant status
+bssid=48:a7:3c:f7:18:66
+freq=5260
+ssid=YNKJ-5G
+id=0
+mode=station
+wifi_generation=5
+pairwise_cipher=CCMP
+group_cipher=TKIP
+key_mgmt=WPA2-PSK
+wpa_state=COMPLETED
+ip_address=192.168.1.14
+p2p_device_address=9e:b8:b4:5f:0a:82
+address=9c:b8:b4:5f:0a:82
+uuid=e935c971-0cfa-572e-a0ee-51addb553f0a
+ieee80211ac=1
 
-配对和连接（扫描后）：
-bluetoothctl pair <MAC_ADDRESS>  # 如 bluetoothctl pair 00:11:22:33:44:55
-bluetoothctl connect <MAC_ADDRESS>
-bluetoothctl trust <MAC_ADDRESS>  # 信任设备，实现自动重连
-
-查看已配对设备
-bluetoothctl paired-devices
-
-移除设备
-bluetoothctl remove <MAC_ADDRESS>
 ```
 
