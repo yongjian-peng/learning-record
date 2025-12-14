@@ -1,3 +1,20 @@
+#### 执行命令
+
+```
+/home/yxw/myproject/rk356x_linux5.1/buildroot/output/rockchip_rk3568/host/bin/qmake test.pro 
+make
+
+在屏幕上创建应用
+	图标显示的方式：配置文件加入图标以及执行程序
+	
+cat /etc/xdg/weston/weston.ini.d/06-mpv-player.ini
+
+```
+
+
+
+
+
 #### 编译配置
 
 ```
