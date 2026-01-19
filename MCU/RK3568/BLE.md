@@ -47,7 +47,7 @@ UART1_TX_M0 => UART1_TX_M0  GPIO2_B4 76
 
 ```
 
-
+使用的是串口接口
 / # cat usr/bin/bt_pcba_test (bt_init.sh)
 killall brcm_patchram_plus1
 echo 0 > /sys/class/rfkill/rfkill0/state # 下电
@@ -167,6 +167,7 @@ Changing 64:6C:37:ED:B8:4F trust succeeded
 #### WIFI 配置
 
 ```
+使用的是 PCIE2.0 接口
 ### 配置
 # 检查内核Wi-Fi配置，打开如下几个配置：
 CONFIG_WL_ROCKCHIP=y

@@ -1,3 +1,17 @@
+时钟频率
+
+命令：cat /sys/kernel/debug/clk/clk_summary | grep usb  lsusb -t 
+
+
+
+![image-20260113133635092](E:\Git\learning-record\MCU\RK3568\assets\image-20260113133635092.png)
+
+
+
+
+
+
+
 ```swift
 arch/arm64/boot/dts/rockchip/rk3568-evb.dtsi
 
