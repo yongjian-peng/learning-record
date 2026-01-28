@@ -1,0 +1,14 @@
+@startmindmap
+caption 超级电容逻辑
+title 超级电容
+* <&flag>电容
+** <&globe>跳帽1-2短接
+*** 电源上电，关机后，会自动开机。
+** <&star>跳帽2-3短接
+***  电源断电，电容启动时候，会检测到是否开机，如果不开机，则会开机
+***  电源上电，电容会充电。
+header
+超级电容逻辑图
+endheader
+center footer 超级电容逻辑图
+@endmindmap
