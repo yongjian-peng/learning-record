@@ -1,0 +1,39 @@
+@startuml
+title capacitor status 
+left to right direction
+skinparam packageStyle rect
+skinparam shadowing false
+
+actor 12A as 12a
+actor 5S as 5s
+actor :Responsable de la colocation: as respColoc
+5s <|-- respColoc
+
+rectangle application {
+	(S'inscrire) as inscription
+	(Afficher la colocation) as afficher
+	(12A_UP) as 12a_up
+	(5S_UP) as 5s_up
+	(Modifier des tâches) as modifierTaches
+    
+
+	(5S_DOWN) .> 5s_up : extends
+	(Supprimer une colocation) ..> 5s_up : extends
+	(Ajouter des tâches) ..> 5s_up : extends
+	(Supprimer des tâches) ..> 5s_up : extends
+    (capacitor) as capacitor_rename
+	(12A_DOWN) .> 12a_up : extends
+	modifierTaches ..> 12a_up : extends
+	note right of modifierTaches
+		Exemple : indiquer qu'une tâche
+		ménagère a été effectuée.
+	end note
+    5s_up ..> capacitor_rename
+
+	12a --> inscription
+	5s --> afficher
+	5s --> 12a_up
+	respColoc -> 5s_up
+    afficher ..> 12a_up
+}
+@enduml
