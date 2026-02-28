@@ -12,40 +12,40 @@ skinparam component {
     ArrowColor         #222266
 }
 
-title "OSCIED Charms Relations (Simple)"
+title "电容开关状态图"
 skinparam componentStyle uml2
 
 cloud {
-    interface "JuJu" as juju
-    interface "API" as api
+    interface "Button_Task" as button_task
+    interface "Button_Send" as api
     interface "Storage" as storage
     interface "Transform" as transform
     interface "Publisher" as publisher
     interface "Website" as website
 
-    juju - [JuJu]
+    button_task - [Button_Task]
 
-    website - [WebUI]
-    [123] .up.> juju
-    [123] .down.> storage
-    [123] .right.> api
+    website - [Button_Change]
+    [Button_Change] .up.> button_task
+    [Button_Change] .down.> storage
+    [Button_Change] .right.> api
 
     api - [Orchestra]
     transform - [Orchestra]
     publisher - [Orchestra]
-    [Orchestra] .up.> juju
+    [Orchestra] .up.> button_task
     [Orchestra] .down.> storage
 
-    [Transform] .up.> juju
+    [Transform] .up.> button_task
     [Transform] .down.> storage
     [Transform] ..> transform
 
-    [Publisher] .up.> juju
+    [Publisher] .up.> button_task
     [Publisher] .down.> storage
     [Publisher] ..> publisher
 
     storage - [Storage]
-    [Storage] .up.> juju
+    [Storage] .up.> button_task
 }
 
 @enduml

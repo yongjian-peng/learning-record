@@ -1,0 +1,40 @@
+@startuml
+
+actor "Developer" <<User>> as ADEV
+actor "Expert" <<User>> as AEXPR
+actor "Maintainer" <<User>> as ADEVOP
+actor "Subscriber" <<User>> as ASUBSCR
+actor "Workforce" <<User>> as AWF
+
+component "Designer" <<Application>> as CQD
+component "Runner" <<Application>> as CQR
+component "MailServer" <<Software System>> as CMB
+
+usecase (Provides new versions) as UC1
+usecase (Updates quizzes content) as UC2
+usecase (Exports updated quizzes) as UC3
+usecase (Sends updated quizzes to subscribers) as UC4
+usecase (Receives updated quizzes) as UC5
+usecase (Add updated quizzes) as UC6
+usecase (Passes quizzes) as UC7
+usecase (Checks quiz results) as UC8
+
+ADEV -down-> UC1
+UC1 -left-> CQD
+UC1 -> CQR
+AEXPR -down-> UC2
+UC2 -down-> CQD
+UC3 -up-> CQD
+ADEVOP -up-> UC3
+ADEVOP -> UC4
+UC4 -right-> CMB
+ASUBSCR -down-> UC5
+UC5 -down-> CMB
+ASUBSCR -up-> UC6
+UC6 -up-> CQR
+UC7 -down-> CQR
+AWF -down-> UC7
+UC8 -left-> CQR
+ASUBSCR -up-> UC8
+
+@enduml
