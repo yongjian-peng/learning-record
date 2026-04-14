@@ -1,11 +1,23 @@
 #### 命令
 
 ```
+Uboot 编译
+	在 u-boot 目录下 执行 ./make.sh loader
+	安卓启动流程中，初始化内存相关。烧写的第一个 load.bin 文件。
+	使用瑞芯微提供的 Uboot 工具，使用命令，修改uboot 配置参数，可以修改波特率等参数。
+	修改后，将 .bin 文件。  然后再拷贝到 对应的原来的目录中。 
+
 启动 
-	source ...  lunch  ./build.sh -U 
+	source ...  lunch  ./build.sh -AUCKu 编译 uboot
+	source ...  lunch  ./buils.sh -CKA 编译 Kernel 
 	make 
 	emulator emulator -verbose | grep kernel 启动带打印日志信息
 	work/out/host/linux-x86/bin/adb   adb shell  命令
+	
+修改 cmdline 参数来源
+	设备树dts的chosen节点
+	安卓源码 defvice/rockchip/common/BoardConfig.mk 文件
+	Uboot 源码自动设置。
 	
 编译
 	u-boot 编译生成的目录 uboot.img rk356x...bin 就是烧录代码时候的文件
@@ -25,6 +37,8 @@ kernel
 	本地化：进入到 device 目录：grep "rockchip_defconfig" -rw 查找出 .mk 文件。里面有宏定义的值。
 		device/rockchip/common/BoardConfig.mk 文件
 	dts 文件：device/rockchip/rk356x/rk356x_r/BoardConfig.mk 
+	一种方法是：使用提供的原生的编译，不过比较慢。
+	另一种是：在 kernel 目录中，创建一个 .sh 脚本，将原生的编译指令，重新拷贝一份，只需要kernel 的。
 ```
 
 
@@ -40,7 +54,21 @@ kernel
 	
 ```
 
-device 目录
+#### device 目录
 
 ![image_001](./Andiro.assets/image_001.png)
+
+![image-20260412102019740](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412102019740.png)
+
+
+
+#### uboot 编译
+
+![image-20260412105726051](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412105726051.png)
+
+#### 单独编译 安卓 内核源码
+
+![image-20260412201016834](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412201016834.png)
+
+
 
