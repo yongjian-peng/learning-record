@@ -1,6 +1,31 @@
+#### User Passwd
+
+```
+sudo passwd pyj
+sudo usermod -aG sudo pyj 将当前用户 添加，可以使用 sudo 
+```
+
+
+
 Docker
 
 ```
+sudo snap install docker          # version 28.4.0, or
+sudo apt  install docker-compose  # version 1.29.2-1
+
+# 确保目录存在
+sudo mkdir -p /var/snap/docker/current/config/
+
+# 写入配置（使用当前可用的镜像加速器）
+sudo tee /var/snap/docker/current/config/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://docker.1ms.run"]
+}
+EOF
+
+sudo systemctl restart snap.docker.dockerd
+
+
 docker ps 
 ```
 
