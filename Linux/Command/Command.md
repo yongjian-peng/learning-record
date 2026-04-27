@@ -1,3 +1,29 @@
+GitLab
+
+```
+修复冲突：在 /etc/gitlab/gitlab.rb 中找到 puma['port']，将其改成其他空闲端口，比如 8081。
+
+ruby
+puma['port'] = 8081
+sudo lsof -i:8080
+
+让配置生效并验证
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl restart
+
+如果看到像 puma, sidekiq, nginx 这些关键服务的状态是 run 或 ok，就说明成功了。
+sudo gitlab-ctl status
+
+sudo gitlab-ctl tail
+
+配置地址
+external_url 'http://git.home.com:800'
+```
+
+
+
+
+
 #### User Passwd
 
 ```
