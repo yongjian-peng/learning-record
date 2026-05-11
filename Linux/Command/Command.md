@@ -1,3 +1,20 @@
+#### Node
+
+```
+ npm config set prefix "D:\Program Files\nodejs\node_global"
+ npm config set cache "D:\Program Files\nodejs\node_cache"
+
+ npm config get prefix
+ npm config get cache
+ 
+ mkdir %USERPROFILE%\.npm-cache
+npm config set cache %USERPROFILE%\.npm-cache --global
+```
+
+
+
+
+
 #### User Passwd
 
 ```
