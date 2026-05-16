@@ -1,4 +1,40 @@
-node
+#### JAVA
+
+```
+ mvn clean package -DskipTests
+ 
+```
+
+
+
+
+
+#### netstat
+
+```
+sudo netstat -tulnp | grep :80
+# 或者使用
+sudo lsof -i :80
+```
+
+
+
+
+
+#### adb
+
+```
+# 查看包的信息
+adb shell 
+dumpsys webviewupdate 
+adb shell 进入，再输入pm list packages | grep webview
+```
+
+
+
+
+
+#### node
 
 ```
 查看所有可用版本：nvm list available
@@ -15,13 +51,41 @@ npm install --legacy-peer-deps
 https://raw.giteeusercontent.com/mirrors/nvm/raw/v0.40.3/install.sh docker compose install
 
 
+# 全局安装 ncu（只需一次）
+npm install -g npm-check-updates
+
+# 检查可升级的依赖（不写回 package.json）
+ncu
+
+# 如果看起来没问题，则写回 package.json 并重新安装
+ncu -u
+npm install
+
+安装图片插件
+npm cache clean --force
+npm config set registry https://registry.npmmirror.com/
+del package-lock.json
+npm install react-photo-album --legacy-peer-deps --verbose
+npm install yet-another-react-lightbox --legacy-peer-deps --verbose
+npm install react-player --legacy-peer-deps --verbose
+
+npm install chonky chonky-icon-fontawesome --legacy-peer-deps --verbose
+
+npm install noty --save 
+npm install noty --legacy-peer-deps --verbose
+
+npm install @material-ui/core @material-ui/styles --save --legacy-peer-deps --verbose
+
+npm install waveform-data pdfjs-dist hls.js --legacy-peer-deps 安装缺少的依赖 
+
+
 ```
 
 
 
 
 
-Git
+#### Git
 
 ```
 git remote set-url origin http://old-domain.com:9090/repo.git
@@ -29,7 +93,7 @@ git remote set-url origin http://old-domain.com:9090/repo.git
 
 
 
-GitLab
+#### GitLab
 
 ```
 修复冲突：在 /etc/gitlab/gitlab.rb 中找到 puma['port']，将其改成其他空闲端口，比如 8081。
@@ -42,6 +106,13 @@ sudo lsof -i:8080
 让配置生效并验证
 sudo gitlab-ctl reconfigure
 sudo gitlab-ctl restart
+sudo gitlab-ctl stop
+
+# 停止底层的守护进程服务
+sudo systemctl stop gitlab-runsvdir.service
+
+# 彻底禁用开机自启
+sudo systemctl disable gitlab-runsvdir.service
 
 如果看到像 puma, sidekiq, nginx 这些关键服务的状态是 run 或 ok，就说明成功了。
 sudo gitlab-ctl status
@@ -89,6 +160,11 @@ docker ps
  scp /e/share/index.php pyj@192.168.31.224:/home/pyj
  
  docker system prune -a -f 这个命令不能敲 会把镜像给清除了。
+ 
+ docker compose logs nginx --tail=50
+ 
+ docker compose rm -s -v nginx 清除 nginx 的 缓存
+
 ```
 
 #### RTC
