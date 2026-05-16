@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #### JAVA
 
 ```
@@ -35,6 +36,22 @@ adb shell 进入，再输入pm list packages | grep webview
 
 
 #### node
+=======
+<<<<<<< HEAD
+#### Node
+
+```
+ npm config set prefix "D:\Program Files\nodejs\node_global"
+ npm config set cache "D:\Program Files\nodejs\node_cache"
+
+ npm config get prefix
+ npm config get cache
+ 
+ mkdir %USERPROFILE%\.npm-cache
+npm config set cache %USERPROFILE%\.npm-cache --global
+=======
+node
+>>>>>>> 5eb9d6c99c3671c5d664199b4535e35e003eb209
 
 ```
 查看所有可用版本：nvm list available
@@ -121,6 +138,7 @@ sudo gitlab-ctl tail
 
 配置地址
 external_url 'http://git.home.com:800'
+>>>>>>> 82e1701b5caa665165e55546ea9f39b1bbe17c00
 ```
 
 
