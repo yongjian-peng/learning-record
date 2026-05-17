@@ -1,4 +1,4 @@
-#### JAVA
+# JAVA
 
 ```
  mvn clean package -DskipTests
@@ -9,7 +9,7 @@
 
 
 
-#### netstat
+# netstat
 
 ```
 sudo netstat -tulnp | grep :80
@@ -21,7 +21,7 @@ sudo lsof -i :80
 
 
 
-#### adb
+# adb
 
 ```
 # 查看包的信息
@@ -30,7 +30,7 @@ dumpsys webviewupdate
 adb shell 进入，再输入pm list packages | grep webview
 ```
 
-#### Node
+# Node
 
 ```
  npm config set prefix "D:\Program Files\nodejs\node_global"
@@ -42,7 +42,6 @@ adb shell 进入，再输入pm list packages | grep webview
  mkdir %USERPROFILE%\.npm-cache
 npm config set cache %USERPROFILE%\.npm-cache --global
 node
->>>>>>> 5eb9d6c99c3671c5d664199b4535e35e003eb209
 
 ```
 查看所有可用版本：nvm list available
@@ -58,14 +57,16 @@ npm install --legacy-peer-deps
 
 https://raw.giteeusercontent.com/mirrors/nvm/raw/v0.40.3/install.sh docker compose install
 
+全局安装 ncu（只需一次）
 
-# 全局安装 ncu（只需一次）
 npm install -g npm-check-updates
 
-# 检查可升级的依赖（不写回 package.json）
+检查可升级的依赖（不写回 package.json）
+
 ncu
 
-# 如果看起来没问题，则写回 package.json 并重新安装
+如果看起来没问题，则写回 package.json 并重新安装
+
 ncu -u
 npm install
 
@@ -135,18 +136,24 @@ external_url 'http://git.home.com:800'
 
 
 
-#### User Passwd
+
 
 ```
-sudo passwd pyj
+# User 
+
+Passwdudo passwd pyj
+
 sudo usermod -aG sudo pyj 将当前用户 添加，可以使用 sudo 
+
 ```
 
 
 
+
+
+```
 #### Docker
 
-```
 sudo snap install docker          # version 28.4.0, or
 sudo apt  install docker-compose  # version 1.29.2-1
 
@@ -166,11 +173,11 @@ sudo systemctl restart snap.docker.dockerd
 docker ps 
 
  scp /e/share/index.php pyj@192.168.31.224:/home/pyj
- 
+
  docker system prune -a -f 这个命令不能敲 会把镜像给清除了。
- 
+
  docker compose logs nginx --tail=50
- 
+
  docker compose rm -s -v nginx 清除 nginx 的 缓存
 
 ```
