@@ -16,6 +16,11 @@ QT 6.10 配置
 QT_QPA_PLATFORM_PLUGIN_PATH=D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\plugins\platforms
 QT_PLUGIN_PATH=D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\plugins
 Path=D:\Qt\6.10.0\mingw_64\bin;D:\Qt\Tools\mingw1310_64\bin;D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\bin;C:\Program Files\jdk-17.0.18\bin;C:\Program Files\jdk-17.0.18\jre\bin;C:\Program Files\Common Files\Oracle\Java\javapath;D:\SoftWare\VMware Workstation\bin\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\MATLAB\R2024b\bin;C:\Program Files\apache-maven-3.9.15\bin;D:\Users\pyj50\AppData\Local\nvm;D:\nvm4w\nodejs;D:\msys64\mingw64\bin;C:\Users\pyj50\AppData\Local\Microsoft\WindowsApps;D:\SoftWare\Microsoft VS Code\bin;C:\MentorGraphics\PADSVX.2.4\SDD_HOME\CAMCAD;D:\Users\pyj50\AppData\Local\nvm;D:\nvm4w\nodejs
+
+运行设置：
+QT_QPA_PLATFORM_PLUGIN_PATH=D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\plugins\platforms
+QT_PLUGIN_PATH=D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\plugins
+Path=D:\Qt\6.10.0\mingw_64\bin;D:\Qt\Tools\mingw1310_64\bin;D:\WorkSpace\QT-Github\shotcut-win64-sdk-26.4.30\Shotcut\bin;C:\Program Files\jdk-17.0.18\bin;C:\Program Files\jdk-17.0.18\jre\bin;C:\Program Files\Common Files\Oracle\Java\javapath;D:\SoftWare\VMware Workstation\bin\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\MATLAB\R2024b\bin;C:\Program Files\apache-maven-3.9.15\bin;D:\Users\pyj50\AppData\Local\nvm;D:\nvm4w\nodejs;D:\msys64\mingw64\bin;C:\Users\pyj50\AppData\Local\Microsoft\WindowsApps;D:\SoftWare\Microsoft VS Code\bin;C:\MentorGraphics\PADSVX.2.4\SDD_HOME\CAMCAD;D:\Users\pyj50\AppData\Local\nvm;D:\nvm4w\nodejs
 ```
 
 
