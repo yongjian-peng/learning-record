@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #### Node
 
 ```
@@ -10,7 +9,6 @@
  
  mkdir %USERPROFILE%\.npm-cache
 npm config set cache %USERPROFILE%\.npm-cache --global
-=======
 node
 
 ```
@@ -63,7 +61,6 @@ sudo gitlab-ctl tail
 
 配置地址
 external_url 'http://git.home.com:800'
->>>>>>> 82e1701b5caa665165e55546ea9f39b1bbe17c00
 ```
 
 
