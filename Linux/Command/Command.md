@@ -43,7 +43,7 @@ adb shell 进入，再输入pm list packages | grep webview
 npm config set cache %USERPROFILE%\.npm-cache --global
 node
 
-```
+
 查看所有可用版本：nvm list available
 安装指定版本 Node.js：nvm install <版本号>（如 nvm install 18.16.0）
 切换使用版本：nvm use <版本号>
@@ -87,13 +87,7 @@ npm install @material-ui/core @material-ui/styles --save --legacy-peer-deps --ve
 
 npm install waveform-data pdfjs-dist hls.js --legacy-peer-deps 安装缺少的依赖 
 
-
 ```
-
-
-
-
-
 #### Git
 
 ```
@@ -134,13 +128,8 @@ external_url 'http://git.home.com:800'
 
 
 
-
-
-
-
-```
 # User 
-
+```
 Passwdudo passwd pyj
 
 sudo usermod -aG sudo pyj 将当前用户 添加，可以使用 sudo 
@@ -148,12 +137,8 @@ sudo usermod -aG sudo pyj 将当前用户 添加，可以使用 sudo
 ```
 
 
-
-
-
-```
 #### Docker
-
+```
 sudo snap install docker          # version 28.4.0, or
 sudo apt  install docker-compose  # version 1.29.2-1
 
@@ -202,7 +187,7 @@ gst-inspect-1.0 --version
 gst-launch-1.0 filesrc location=test.mp4 ! qtdemux ! queue ! h264parse ! mppvideodec ! videoconvert ! autovideosink
 
 gst-inspect-1.0 |grep mpp
-```
 
 ![image-20260411170509728](E:\Git\learning-record\Linux\Command\assets\image-20260411170509728.png)
 
+```
