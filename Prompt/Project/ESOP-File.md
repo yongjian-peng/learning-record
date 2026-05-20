@@ -1,3 +1,20 @@
+### 文件展示
+
+```
+https://github.com/TimboKZ/Chonky 这是修改后的项目，已经加载到了 项目 https://gitee.com/whiteshader/ruoyi-react 中去了。
+1. 设计一个接口，符合 exam_fs_nodes 数据表结构，返回 符合的 json 格式。
+2. 文件系统返回的是所有层级的文件，要能根据参数 is_dir 判断是否有下层数据，当有下层数据时候为 1， 点击文件夹后，则再次发起一个链接。获取下一层数据。
+3. 兼容 后端java 已经的实现，在 ExamFsNodesController  IExamFsNodesService  ExamFsNodesServiceImpl ExamFsNodesMapper 或者新增一个接口，都可以的。使用 Chonky 的页面样式。兼容json数据格式，并请求后端接口。
+
+要将 Chonky 的交互样式与你的若依 (Ruoyi) 后端完美结合，我们需要将原本的“静态全局加载”改造为动态懒加载（即点击文件夹时，再发起请求获取下一层的数据）。
+
+考虑到若依原有的 /system/nodes/list 接口默认会通过 startPage() 进行分页，这在 Chonky 这种瀑布流或网格视图的文件浏览器中体验不好。为了不影响你现有的业务逻辑，我建议在 ExamFsNodesController 中新增两个专门服务于 Chonky 的接口：一个用来获取指定目录下的文件，另一个用来获取面包屑导航（文件夹链路）
+```
+
+
+
+
+
 ### 新增文件树模块
 
 ```

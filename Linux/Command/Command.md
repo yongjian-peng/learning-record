@@ -88,15 +88,22 @@ npm install @material-ui/core @material-ui/styles --save --legacy-peer-deps --ve
 npm install waveform-data pdfjs-dist hls.js --legacy-peer-deps 安装缺少的依赖 
 
 ```
-#### Git
+# Git
 
 ```
 git remote set-url origin http://old-domain.com:9090/repo.git
+
+# git submodule 管理子工程。
+git clone --recursive https://github.com/barry-ran/QtScrcpy.git	
+git submodule update --init --recursive
+
 ```
 
 
 
-#### GitLab
+
+
+# GitLab
 
 ```
 修复冲突：在 /etc/gitlab/gitlab.rb 中找到 puma['port']，将其改成其他空闲端口，比如 8081。
@@ -137,7 +144,7 @@ sudo usermod -aG sudo pyj 将当前用户 添加，可以使用 sudo
 ```
 
 
-#### Docker
+# Docker
 ```
 sudo snap install docker          # version 28.4.0, or
 sudo apt  install docker-compose  # version 1.29.2-1
@@ -164,10 +171,12 @@ docker ps
  docker compose logs nginx --tail=50
 
  docker compose rm -s -v nginx 清除 nginx 的 缓存
+ 
+ docker compose up -d nginx php-fpm mysql redis openjdk
 
 ```
 
-#### RTC
+# RTC
 
 ```
 date 
@@ -178,7 +187,7 @@ hwclock -s
 
 
 
-#### GStreamer
+# GStreamer
 
 ```
 gst-inspect-1.0 --version
