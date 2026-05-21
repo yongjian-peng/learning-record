@@ -27,6 +27,18 @@ MinGw 13.1.0 64-bit Qt Chars QT Multimedia Qt Shader Tools Qt Websockets
 Qt 6.6.2
 MinGw 11.2.0 64-bit Qt Charts Qt Positioning Qt WebChannel Qt WebEngine
 CMake 3.30.5 
+
+信号（signal）：当一个对象的状态发生变化时，它可以“发射”一个信号，告知外界“我发生了某件事”。信号只负责广播，不负责执行具体动作。
+
+    槽（slot）：是一个普通的函数（或 Lambda），当连接到某个信号后，信号发射时，槽函数会被自动调用。
+
+    连接（connect）：使用 QObject::connect() 将信号和槽绑定在一起。
+
+比喻：
+
+    信号 = 门铃按钮；槽 = 开门动作。
+
+    你把门铃按钮连接到开门动作（connect），那么你按下按钮（emit 信号）时，门就会自动打开（槽被调用）
 ```
 
 

@@ -34,6 +34,14 @@ https://www.neea.edu.cn/res/Home/2501/285001f3dddda55ce5fd05169976cd24.pdf?downl
 参考项目 https://gitee.com/whiteshader/ruoyi-react 安装好了插件，npm install react-photo-album yet-another-react-lightbox  写出兼容 ruoyi-react 的 示例 demo， 能够使用  react-photo-album 展示图片，yet-another-react-lightbox 打开图片后，使用灯箱 可以下一张导航，
 
 
+一、 页面刷新与菜单点击的请求控制逻辑分析
+在基于 Umi Max (Ant Design Pro) 的 RuoYi-React 架构中，浏览器的这两种行为由不同的生命周期机制控制：
+
+浏览器地址栏重新请求 (F5 刷新) - 触发全局初始化：
+当你在浏览器中直接刷新整个页面时，React 应用会被重新挂载（Mount）。此时，Umi 框架会执行 src/app.tsx 中的全局初始化入口方法 —— getInitialState。在这个方法中，系统被设定为去拉取当前用户的核心信息（getInfo）以及动态生成的路由菜单（getRouters）。
+
+点击菜单栏 - 触发单页路由跳转 (SPA)：
+当你点击侧边栏菜单时，React 处于单页面应用（SPA）运行态。此时应用并没有重新加载，仅仅是内部的 react-router 捕获到了 URL 的变化，直接按需加载目标页面的组件，并触发该特定页面内部的 useEffect 或 useRequest 钩子去请求业务数据。全局的 getInitialState 不会再次执行。
 
 
 ```
