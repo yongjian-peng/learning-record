@@ -39,6 +39,11 @@ CMake 3.30.5
     信号 = 门铃按钮；槽 = 开门动作。
 
     你把门铃按钮连接到开门动作（connect），那么你按下按钮（emit 信号）时，门就会自动打开（槽被调用）
+
+缺少 QtScrcpy/CMakeLists.txt 文件解决办法。    
+ git clone --recursive https://github.com/barry-ran/QtScrcpy.git
+ git submodule update --init --recursive
+ 
 ```
 
 
