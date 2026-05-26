@@ -44,6 +44,8 @@ CMake 3.30.5
  git clone --recursive https://github.com/barry-ran/QtScrcpy.git
  git submodule update --init --recursive
  
+ libgcc_s_seh-1.dll windows 依赖库
+ 
 ```
 
 
