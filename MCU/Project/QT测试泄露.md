@@ -1,6 +1,8 @@
 # 项目有：
 
 ```
+-DWITH_WEBENGINE=OFF -DFETCHCONTENT_SOURCE_DIR_ZLIB=E:/WorkSpace/QT-Github/thirdparty/zlib-src -DFETCHCONTENT_SOURCE_DIR_EXPAT=E:/WorkSpace/QT-Github/thirdparty/expat-src
+
 曲线绘制图表。
 压力信号同步显示在触摸屏及工控电脑上，绘制曲线。
 
