@@ -1,0 +1,72 @@
+@startuml
+left to right direction
+
+' UI 层
+package "UI 层: Qt Quick Controls 2 / QML" as UI {
+    component LoginPage
+    component PrimaryTestPage
+    component SecondaryTestPage
+    component RecordQueryPage
+    component "AppHeader / AppFooterNav / PanelCard / TrendChart" as Components
+}
+
+' ViewModel 层
+package "ViewModel 层: QObject + Q_PROPERTY + Q_INVOKABLE" as VM {
+    component AuthViewModel
+    component "primaryTestVm: TestRunViewModel" as TestVM1
+    component "secondaryTestVm: TestRunViewModel" as TestVM2
+    component RecordQueryViewModel as QueryVM
+}
+
+' 业务服务层
+package "业务服务层" as Service {
+    component AuthService
+    component "TestOrchestrator 测试状态机" as Orchestrator
+    component PlcService
+    component SensorService
+    component TouchService
+}
+
+' 基础设施层
+package "基础设施层" as Infra {
+    component IPlcClient
+    component "SimulatedPlcClient / 后续 ModbusTcpPlcClient" as SimPlc
+    component DatabaseManager as Db
+    component UserRepository as UserRepo
+    component TestRecordRepository as RecordRepo
+}
+
+' 外部系统 / 数据库
+database "MySQL leak_test_system" as MySQL
+node "PLC / 阀门" as PLC
+node "温度 / 压力 / 流量传感器" as Sensors
+node "触摸屏 HMI" as HMI
+
+' 连接关系
+' UI 层整体依赖 ViewModel 层（宏观架构关系，用注释说明）
+' 注：UI --> VM
+
+AuthViewModel --> AuthService
+AuthService --> UserRepo
+UserRepo --> Db
+Db --> MySQL
+
+TestVM1 --> Orchestrator
+TestVM2 --> Orchestrator
+QueryVM --> RecordRepo
+RecordRepo --> Db
+
+Orchestrator --> PlcService
+PlcService --> IPlcClient
+IPlcClient --> SimPlc
+SimPlc --> PLC
+
+Orchestrator --> SensorService
+SensorService --> Sensors
+
+TouchService --> Orchestrator
+HMI --> TouchService
+
+Orchestrator --> RecordRepo
+
+@enduml

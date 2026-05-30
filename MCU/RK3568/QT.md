@@ -1,4 +1,21 @@
-#### 开源项目推荐
+## 检测工具推荐
+
+```
+当前开发阶段首选：GammaRay + Heob + Qt Creator QML Profiler。
+
+后期 UI 稳定后，再引入 Squish 做自动化回归测试。
+
+原因很简单：
+
+Squish 适合“功能流程/UI 自动化测试”，例如登录、配方编辑、开始测试、曲线显示、报警、打印、数据保存等完整操作流程。它是专业 GUI 自动化测试工具，支持 Qt Widgets、QML、Qt Quick、Qt WebKit、Qt WebEngine 等应用。
+GammaRay 适合“开发阶段排查 QML、QObject、信号槽、Model/View、Qt Quick 场景图、属性绑定”等问题，相当于 Qt 程序的运行时透视工具。
+Heob 适合 Windows 下排查内存泄漏、缓冲区越界、崩溃相关问题，并且 Qt Creator 已经提供 Analyze > Heob 集成入口。
+QML Profiler 适合排查 QML 卡顿、界面掉帧、JavaScript 执行过多、界面响应慢等性能问题。
+```
+
+
+
+## 开源项目推荐
 
 ```
 项目	推荐指数	适合
@@ -52,7 +69,7 @@ CMake 3.30.5
 
 
 
-#### 执行命令
+## 执行命令
 
 ```
 /home/yxw/myproject/rk356x_linux5.1/buildroot/output/rockchip_rk3568/host/bin/qmake test.pro 
@@ -69,7 +86,7 @@ cat /etc/xdg/weston/weston.ini.d/06-mpv-player.ini
 
 
 
-#### 编译配置
+## 编译配置
 
 ```
 BR2_PACKAGE_QT5IMAGEFORMATS=y
@@ -93,7 +110,7 @@ BR2_PACKAGE_QT5BASE_SYSLOG=y
 
 
 
-#### 编译报错
+## 编译报错
 
 ```
 2025-11-10T19:46:07 ERROR: Feature 'system-pcre2' was enabled, but the pre-condition 'libs.pcre2' failed.

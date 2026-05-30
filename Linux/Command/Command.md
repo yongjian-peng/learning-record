@@ -1,3 +1,34 @@
+## Skills
+
+```
+# 使用绝对路径安装到项目中
+npx skills add "E:\WorkSpace\taste-skill-main" --list
+
+cd E:\WorkSpace\MyFrontendProject
+
+npx skills add "E:\WorkSpace\taste-skill-main" --skill "gpt-taste" -a codex --copy
+
+
+全局安装到 Codex：
+npx skills add "E:\WorkSpace\taste-skill-main" --skill "gpt-taste" -a codex -g --copy
+
+全局安装后，大概会在：
+
+C:\Users\你的用户名\.codex\skills\
+
+
+查看是否安装成功
+
+执行：
+
+npx skills list
+
+使用 /redesign-existing-projects skill，先审查当前页面 UI 问题，再给出改造方案，并修改代码。
+要求保留原来的业务逻辑、接口字段、路由名称，只优化布局、颜色、层级和交互。
+```
+
+
+
 # JAVA
 
 ```

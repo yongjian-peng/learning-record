@@ -1,3 +1,54 @@
+## 安装检测工具
+
+### GammaRay
+
+```
+Powershell 命令
+建议放到：
+
+E:\Tools\GammaRay
+
+源码目录：
+
+E:\Tools\GammaRay-src
+
+构建目录：
+
+E:\Tools\GammaRay-build
+
+安装目录：
+
+E:\Tools\GammaRay-qt610-mingw64
+
+
+继续在当前 PowerShell 里执行
+$QT_DIR = "E:\Qt\Qt5.12\6.10.2\mingw_64"
+$MINGW_DIR = "E:\Qt\Qt5.12\Tools\mingw1310_64"
+
+$env:Path = "$MINGW_DIR\bin;$QT_DIR\bin;C:\ninja;$env:Path"
+删除之前失败的构建目录
+Remove-Item -Recurse -Force "E:\Tools\GammaRay-build" -ErrorAction SilentlyContinue
+
+
+cmake -S "E:\Tools\GammaRay-src" `
+      -B "E:\Tools\GammaRay-build" `
+      -G Ninja `
+      -DCMAKE_BUILD_TYPE=Release `
+      -DCMAKE_PREFIX_PATH="$QT_DIR" `
+      -DCMAKE_INSTALL_PREFIX="E:\Tools\GammaRay-qt610-mingw64" `
+      -DCMAKE_C_COMPILER="$MINGW_DIR\bin\gcc.exe" `
+      -DCMAKE_CXX_COMPILER="$MINGW_DIR\bin\g++.exe" `
+      -DCMAKE_MAKE_PROGRAM="C:\ninja\ninja.exe"
+编译安装      
+cmake --build "E:\Tools\GammaRay-build" --target install
+
+编译完成后启动 GammaRay
+& "E:\Tools\GammaRay-qt610-mingw64\bin\gammaray.exe" `
+  "E:\WorkSpace\QT-Github\Leak\LeakTestSystem\build\Desktop_Qt_6_10_2_MinGW_64_bit-Debug\LeakTestSystem.exe"
+```
+
+
+
 # 项目有：
 
 ```
