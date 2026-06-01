@@ -1,3 +1,20 @@
+## 掌握技能点
+
+```
+网络编程
+
+HTTP通信：使用QNetworkAccessManager发送请求，解析JSON/XML数据。
+TCP/UDP通信：掌握QTcpSocket、QUdpSocket的用法，实现客户端与服务器通信。
+3. 多线程与并发编程
+
+QThread与QRunnable：创建线程，实现任务分发。
+线程同步：使用QMutex、QWaitCondition等工具避免资源竞争。
+```
+
+
+
+
+
 ## 检测工具推荐
 
 ```
