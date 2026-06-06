@@ -1,4 +1,50 @@
-## Skills
+
+
+# SCP
+
+```
+# 本地 → 远程：拷贝单个文件
+scp /home/user/a.txt root@192.168.1.100:/root/
+
+ scp /e/share/docker-compose.influxdb-emqx.yml pyj@192.168.31.224:/home/pyj
+
+# 远程 → 本地：拷贝整个目录
+scp -r root@192.168.1.100:/var/log /home/user/
+```
+
+
+
+# micorcom
+
+```
+sudo apt install picocom
+sudo picocom -b 115200 --echo /dev/ttyUSB2
+
+然后确认没有进程占用：
+
+sudo fuser -v /dev/ttyUSB2
+
+如果还有占用，杀掉：
+
+sudo fuser -k /dev/ttyUSB2
+
+ping -I usb0 baidu.com
+```
+
+
+
+# dpkg
+
+```
+sudo apt-get install ./todesk-vx.x.x.x-arm64.deb
+
+
+
+```
+
+
+
+# Skills
 
 ```
 # 使用绝对路径安装到项目中
@@ -132,7 +178,11 @@ git submodule update --init --recursive
 
 # 创建新的分支，并推送到远程。保持关联关系。
 git checkout -b master
-git push -u origin master
+git add .
+git commit -m"init"
+git push -u origin master => git push --set-upstream origin master
+
+git remote add origin  http://192.168.31.224:9008/crm/backend-python-api.git
 
 
 ```
@@ -211,6 +261,10 @@ docker ps
  docker compose rm -s -v nginx 清除 nginx 的 缓存
  
  docker compose up -d nginx php-fpm mysql redis openjdk
+ 
+ docker compose -f docker-compose.yml -f docker-compose.influxdb-emqx.yml up -d influxdb emqx
+ 
+ docker compose -f docker-compose.yml -f docker-compose.influxdb-emqx.yml up -d  emqx
 
 ```
 
