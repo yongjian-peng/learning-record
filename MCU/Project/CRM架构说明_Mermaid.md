@@ -391,6 +391,61 @@ classDiagram
     IPerformanceRunner <|.. AndroidPerformanceRunner
 ```
 
+### basic-info 推送到 Qt/QML Client 正确流程图
+
+```mermaid
+flowchart TD
+    subgraph Agent["02_agent_core_cpp：Agent Core C++"]
+        A1["AgentApp 启动"]
+        A2["BasicInfoCollector 真实采集"]
+        A3["Windows 采集接口<br/>WMI / WinAPI / IP Helper / DXGI"]
+        A4["生成 basic-info JSON"]
+        A5["MQTT 发布<br/>agent/{deviceId}/basic-info"]
+    end
+
+    subgraph Backend["03_backend_python_api：FastAPI 后端"]
+        B1["MQTT Consumer 订阅<br/>agent/+/basic-info"]
+        B2["解析 basic-info JSON"]
+        B3["写入 MySQL<br/>device_basic_info.raw_json"]
+        B4["更新内存缓存<br/>basic_info_cache[deviceId]"]
+        B5["WebSocket 广播<br/>type = basic_info_updated"]
+        B6["Device API<br/>GET /api/devices/{deviceId}/basic-info"]
+    end
+
+    subgraph QtClient["01_qt_qml_client：Qt/QML Client"]
+        C1["WebSocketClient 接收消息"]
+        C2["判断 type == basic_info_updated"]
+        C3["DeviceViewModel 处理 basic-info"]
+        C4["DeviceModel 更新 basicInfoGroups"]
+        C5["BasicInfoPage.qml 自动刷新"]
+        C6["页面首次打开"]
+        C7["ApiClient 请求 basic-info"]
+    end
+
+    A1 --> A2
+    A2 --> A3
+    A3 --> A4
+    A4 --> A5
+
+    A5 --> B1
+    B1 --> B2
+    B2 --> B3
+    B2 --> B4
+    B4 --> B5
+
+    B5 --> C1
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C4 --> C5
+
+    C6 --> C7
+    C7 --> B6
+    B6 --> B3
+    B6 --> B4
+    B6 --> C3
+```
+
 ---
 
 ## 六、性能测试软件适配方案
