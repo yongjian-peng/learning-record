@@ -1,3 +1,35 @@
+# 压力测试说明
+
+```
+总体实现架构:核心原则
+推荐的 CPU / GPU / 内存 / 硬盘实现方法 windows 方法 
+推荐 Agent Core 内部模块设计 1. StressManager 负责统一调度。2. Windows 外部进程控制。
+推荐， 统一指令设计。启动 CPU 压力，停止 CPU 压力， 启动 GPU 压力，停止，启动内存压力， 停止。启动硬盘压力， 停止。
+推荐，运行时长和报警值设计，运行时长， 报警配置， 初始默认阈值建议，并刚给到 SQL 表数据，从数据库中获取配置。
+推荐，Python Backend API 设计。
+推荐，Qt/QML 页面建议。Qt/QML 不直接运行 FurMark / AIDA64 / CPU-Z / AS SSD。它只调用 Backend API。
+工具选择建议： 使用命令方式，使用DiskSpd。
+最终开发顺序，按照推荐顺序
+
+V2 升级版：
+CPU：C++ 内置压力引擎
+GPU：Direct3D / Vulkan / OpenCL 内置压力引擎
+内存：C++ 内置内存压力引擎
+硬盘：C++ 内置文件 I/O 压力引擎
+报警：温度 / 使用率 / 剩余空间
+控制：start / stop / duration / status
+推送：stress_status_updated / stress_alarm / telemetry_updated
+```
+
+# CPU / GPU / 内存 / 硬盘实现方法
+
+| 类型     | Windows 首版实现                                             | Linux 兼容方案                               | Android 兼容方案                    |
+| -------- | ------------------------------------------------------------ | -------------------------------------------- | ----------------------------------- |
+| CPU 压力 | C++ 内置线程压力，支持整数/FPU/AVX 循环；可选 AIDA64 `/SST CPU,FPU,Cache` | `stress-ng --cpu` 或 C++ 内置压力            | JNI / Native C++ 线程压力           |
+| GPU 压力 | FurMark 外部进程；后续可做 Direct3D / Vulkan / OpenCL 内置压力 | Vulkan / OpenGL / glmark2 / 自研 shader loop | OpenGL ES / Vulkan offscreen render |
+| 内存压力 | C++ 内置申请内存、写入、校验、释放；可选 AIDA64 RAM          | `stress-ng --vm` 或 C++ 内置                 | JNI / Native C++ 分配内存块         |
+| 硬盘压力 | DiskSpd 或 fio；不要优先用 AS SSD GUI                        | fio                                          | fio 移植版或 Native 文件读写压力    |
+
 # InfluxDB 数据操作命令
 
 ```
