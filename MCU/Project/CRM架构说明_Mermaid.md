@@ -445,6 +445,57 @@ flowchart TD
     B6 --> B4
     B6 --> C3
 ```
+### QT填写IP配置，Agent_core 消费流程图
+```mermaid
+flowchart LR
+    subgraph QT["01_qt_qml_client"]
+        Q1["设置页面<br/>服务器IP / 端口 / 主机名称 / 主机批次 / 主机ID / deviceId"]
+        Q2["ConfigService<br/>保存 Qt 本地配置"]
+        Q3["WebSocketClient<br/>发送 config.update"]
+        Q4["Telemetry API Client<br/>使用最新 deviceId 请求数据"]
+    end
+
+    subgraph API["03_backend_python_api"]
+        B1["WebSocket Hub<br/>/ws/client<br/>/ws/agent"]
+        B2["Config API / Config Service<br/>校验配置"]
+        B3["MySQL<br/>device_config / device 表"]
+        B4["命令路由<br/>根据 oldDeviceId 找到 Agent 连接"]
+    end
+
+    subgraph AGENT["02_agent_core_cpp"]
+        A1["Agent WebSocket Client<br/>保持连接后端"]
+        A2["ConfigCommandHandler<br/>处理 config.update"]
+        A3["AgentConfigManager<br/>写入本地配置文件"]
+        A4["CollectorManager<br/>重启采集上下文"]
+        A5["MqttClientManager<br/>更新 mqtt.clientId"]
+        A6["InfluxDB Writer<br/>使用新 deviceId 写入"]
+    end
+
+    subgraph DATA["数据消费"]
+        D1["InfluxDB<br/>telemetry"]
+        D2["Web Admin Vue<br/>基本数据 / 实时数据 / 历史曲线"]
+        D3["Qt 实时页面<br/>latest / history"]
+    end
+
+    Q1 --> Q2
+    Q2 --> Q3
+    Q3 --> B1
+    B1 --> B2
+    B2 --> B3
+    B2 --> B4
+    B4 --> A1
+    A1 --> A2
+    A2 --> A3
+    A3 --> A4
+    A3 --> A5
+    A4 --> A6
+    A5 --> A6
+    A6 --> D1
+
+    B1 --> Q3
+    Q4 --> D3
+    D1 --> D2
+```
 
 ---
 

@@ -1,3 +1,15 @@
+# 待完成的需求：
+
+```
+1. 监控指标的范围报警设置，通过数据库获取，并使用数据库配置。
+2. 后端管理系统，权限用户页面逻辑。
+3. 后端页面 tree.js 3D 动态图展示。
+```
+
+
+
+
+
 # 压力测试说明
 
 ```
@@ -245,5 +257,9 @@ http://192.168.31.224:9008/crm/backend-python-api.git
 http://192.168.31.224:9008/crm/agent-core-cpp.git
 
 http://192.168.31.224:9008/crm/qt-qml-client.git
+
+
+curl.exe "http://127.0.0.1:8000/api/telemetry/latest/你的deviceId"
+curl.exe "http://127.0.0.1:8000/api/telemetry/history/你的deviceId?window=10s&metrics=cpu.usage_percent,memory.used_gb"
 ```
 
