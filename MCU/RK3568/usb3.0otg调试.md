@@ -4,7 +4,7 @@
 
 
 
-![image-20260113133635092](E:\Git\learning-record\MCU\RK3568\assets\image-20260113133635092.png)
+![image-20260113133635092](./\RK3568\assets\image-20260113133635092.png)
 
 
 

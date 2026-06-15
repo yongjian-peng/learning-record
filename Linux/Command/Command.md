@@ -1,3 +1,27 @@
+# 用 Hugging Face CLI 下载完整模型
+
+```
+# 1. 创建模型保存目录
+mkdir E:\Models\gemma-4-31B-it
+
+# 2. 安装 Hugging Face 下载工具
+py -m pip install -U "huggingface_hub[hf_xet]"
+
+# 3. 登录 Hugging Face
+hf auth login
+
+# 4. 下载完整模型仓库
+hf download google/gemma-4-31B-it --repo-type model --local-dir E:\Models\gemma-4-31B-it
+如果你这里网络访问 Hugging Face 慢，可以先加代理，按你之前的端口 7897
+
+$env:HTTP_PROXY="http://127.0.0.1:7897"
+$env:HTTPS_PROXY="http://127.0.0.1:7897"
+
+然后执行：
+hf download google/gemma-4-31B-it --repo-type model --local-dir E:\Models\gemma-4-31B-it
+
+```
+
 
 
 # SCP
@@ -183,6 +207,11 @@ git commit -m"init"
 git push -u origin master => git push --set-upstream origin master
 
 git remote add origin  http://192.168.31.224:9008/crm/backend-python-api.git
+
+
+$env:HTTP_PROXY="http://127.0.0.1:7897"
+$env:HTTPS_PROXY="http://127.0.0.1:7897"
+$env:ALL_PROXY="socks5://127.0.0.1:7897"
 
 
 ```

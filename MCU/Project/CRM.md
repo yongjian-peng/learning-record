@@ -1,9 +1,22 @@
 # 待完成的需求：
 
 ```
-1. 监控指标的范围报警设置，通过数据库获取，并使用数据库配置。
+1. 监控指标的范围报警设置，通过数据库获取，并使用数据库配置。并验证测试。
 2. 后端管理系统，权限用户页面逻辑。
 3. 后端页面 tree.js 3D 动态图展示。
+4. 后端页面 UI 重新设计一版。
+5. QT 页面数据使用第一个页面数据，其他的给删除掉。
+6. 发现了问题，发送开启指令不生效了。需要修复。
+7. 后端需要设置，管理开启软件的功能，能够选择，需要从数据库中获取，然后再发送开启或者停止指令。
+8. 后端 echarts 图，可以选查看据图的那个指标。显示和隐藏。
+
+流程：
+开启客户端软件 -> 填写 服务器 IP 地址 -> 链接 推送到 python_api 数据 -> 保存数据。
+采集数据 -> 发布到 MQTT 服务  python_api 订阅 数据  保存到 influxdb 中 
+客户端 请求 -> python_api 获取实时数据，和历史数据。反馈到 qt_qml 中显示。
+python_api 开启软件指令 到执行指令 到执行动作，到反馈结果的流程图。
+vue_admin 开启软件指令 到开启软件的流程。
+有关所有 mqtt 订阅和发布的流程图。
 ```
 
 
@@ -120,6 +133,30 @@ Qt/QML 客户端、Vue 管理端显示
 # 启动命令
 
 ```
+更新
+# 查看帮助
+.\scripts\dev.ps1 -Action help
+
+# 编译 Agent 并测试
+.\scripts\dev.ps1 -Action build -Target agent -RunTests
+
+# 管理员权限单次采集
+.\scripts\dev.ps1 -Action agent-once
+
+# 生成完整部署包
+.\scripts\dev.ps1 -Action agent-package -RunTests
+
+# 更新 LocalSystem 服务及配置
+.\scripts\dev.ps1 -Action agent-service -ForceConfig
+
+# 查看服务和 PawnIO 状态
+.\scripts\dev.ps1 -Action agent-status
+
+# 编译并启动全部项目
+.\scripts\dev.ps1 -Action dev -Target all
+
+
+
 - `01_qt_qml_client`
 cd E:\WorkSpace\CRM\01_qt_qml_client
 $env:PATH='E:\Qt\Qt5.12\Tools\mingw1310_64\bin;E:\Qt\Qt5.12\6.10.2\mingw_64\bin;C:\ninja;' + $env:PATH
@@ -204,6 +241,34 @@ powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 -Action init
 
 
 
+推荐直接执行这组命令，删除
+
+$INFLUX_URL = "http://192.168.31.224:8086"
+$ORG_ID = "90ba40944f480108"
+$TOKEN = "P1pKah75yVRjDNvo5QxEsKu8R3FET0vgPoxjzzJdcWdFtoV_Wbe2dfIQNeHnS348abkkJro8dr3F3Am0Vgr76w=="
+
+$headers = @{
+  Authorization = "Token $TOKEN"
+}
+
+# 删除 metrics
+curl.exe -i -X DELETE "$INFLUX_URL/api/v2/buckets/e021fd02c7df156b" `
+  -H "Authorization: Token $TOKEN" `
+  --max-time 15
+
+# 删除 metrics-001
+curl.exe -i -X DELETE "$INFLUX_URL/api/v2/buckets/b14ac64caa776d0a" `
+  -H "Authorization: Token $TOKEN" `
+  --max-time 15
+
+# 重新查看
+Invoke-RestMethod `
+  -Method Get `
+  -Uri "$INFLUX_URL/api/v2/buckets?orgID=$ORG_ID" `
+  -Headers $headers | ConvertTo-Json -Depth 10
+
+
+
 
 ```
 
@@ -261,5 +326,9 @@ http://192.168.31.224:9008/crm/qt-qml-client.git
 
 curl.exe "http://127.0.0.1:8000/api/telemetry/latest/你的deviceId"
 curl.exe "http://127.0.0.1:8000/api/telemetry/history/你的deviceId?window=10s&metrics=cpu.usage_percent,memory.used_gb"
+
+curl http://127.0.0.1:8000/api/telemetry/latest/<deviceId>
+curl "http://127.0.0.1:8000/api/telemetry/history/<deviceId>?window=5s&metrics=cpu.usage_percent,cpu.temperature_celsius"
+curl http://127.0.0.1:8000/api/devices/<deviceId>/basic-info
 ```
 

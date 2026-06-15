@@ -14,7 +14,7 @@ df -h /var/log
 
 
 
-![image-20260312095441267](E:\Git\learning-record\MCU\Project\assets\image-20260312095441267.png)
+![image-20260312095441267](./\Project\assets\image-20260312095441267.png)
 
 
 
@@ -22,7 +22,7 @@ df -h /var/log
 
 
 
-![image-20260312085823228](E:\Git\learning-record\MCU\Project\assets\image-20260312085823228.png)
+![image-20260312085823228](./\Project\assets\image-20260312085823228.png)
 
 
 
@@ -30,13 +30,13 @@ df -h /var/log
 
 清除日志文件
 
-![image-20260312090342305](E:\Git\learning-record\MCU\Project\assets\image-20260312090342305.png)
+![image-20260312090342305](./\Project\assets\image-20260312090342305.png)
 
 进入 root
 
- ![image-20260312091910818](E:\Git\learning-record\MCU\Project\assets\image-20260312091910818.png)
+ ![image-20260312091910818](./\Project\assets\image-20260312091910818.png)
 
  远程控制，是不能解决 进入 GRUB 的 
 
-![image-20260312092010728](E:\Git\learning-record\MCU\Project\assets\image-20260312092010728.png)
+![image-20260312092010728](./\Project\assets\image-20260312092010728.png)
 

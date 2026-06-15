@@ -58,7 +58,7 @@ pip3 uninstall meson
 
 https://github.com/mesonbuild/meson/releases?page=7
 
-![img](E:\Git\learning-record\MCU\Project\Document\assets\wps1.jpg) 
+![img](./\Project\Document\assets\wps1.jpg) 
 
 tar xzf meson-0.64.0.tar.gz 
 
@@ -74,7 +74,7 @@ meson --version
 
  
 
-![img](E:\Git\learning-record\MCU\Project\Document\assets\wps2.jpg) 
+![img](./\Project\Document\assets\wps2.jpg) 
 
 # **安装 gstreamer**
 

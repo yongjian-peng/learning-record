@@ -1,3 +1,154 @@
+## 安装FinceptTerminal 股票项目-release
+
+```
+vs2022 切换arm 的版本。
+& "E:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -HostArch amd64
+
+安装 OpenSSl
+cd E:\Tools
+
+git clone https://github.com/microsoft/vcpkg.git
+
+cd E:\Tools\vcpkg
+
+.\bootstrap-vcpkg.bat
+
+安装 OpenSSL x64
+cd E:\Tools\vcpkg
+
+.\vcpkg.exe install openssl:x64-windows
+
+.\vcpkg.exe install zlib:x64-windows  // 用 vcpkg 安装 ZLIB
+
+
+执行一套命令
+cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+$env:QT_DIR="E:\Qt\Qt5.12\6.10.2\msvc2022_64"
+$env:VCPKG_ROOT="E:\Tools\vcpkg"
+$env:OPENSSL_ROOT_DIR="$env:VCPKG_ROOT\installed\x64-windows"
+$env:ZLIB_ROOT="$env:VCPKG_ROOT\installed\x64-windows"
+
+$env:PATH="$env:OPENSSL_ROOT_DIR\bin;$env:QT_DIR\bin;$env:PATH"
+
+where.exe cl
+where.exe qmake
+qmake --version
+
+Test-Path "$env:OPENSSL_ROOT_DIR\lib\libssl.lib"
+Test-Path "$env:OPENSSL_ROOT_DIR\lib\libcrypto.lib"
+Test-Path "$env:ZLIB_ROOT\lib\z.lib"
+Test-Path "$env:ZLIB_ROOT\include\zlib.h"
+
+清理旧构建目录：
+Remove-Item -Recurse -Force .\build\win-release -ErrorAction SilentlyContinue
+
+重新配置 CMake
+cmake -B build\win-release -G Ninja -DCMAKE_BUILD_TYPE=Release `
+  -DCMAKE_PREFIX_PATH="$env:QT_DIR" `
+  -DQt6_DIR="$env:QT_DIR\lib\cmake\Qt6" `
+  -DFINCEPT_ALLOW_QT_DRIFT=ON `
+  -DFINCEPT_QT_PIN_MODE=ANY `
+  -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" `
+  -DOPENSSL_INCLUDE_DIR="$env:OPENSSL_ROOT_DIR\include" `
+  -DOPENSSL_SSL_LIBRARY="$env:OPENSSL_ROOT_DIR\lib\libssl.lib" `
+  -DOPENSSL_CRYPTO_LIBRARY="$env:OPENSSL_ROOT_DIR\lib\libcrypto.lib" `
+  -DZLIB_INCLUDE_DIR="$env:ZLIB_ROOT\include" `
+  -DZLIB_LIBRARY="$env:ZLIB_ROOT\lib\z.lib"
+  
+ 再编译：
+  cmake --build build\win-release --parallel 4
+编译成功后部署运行
+windeployqt .\build\win-release\FinceptTerminal.exe
+复制 vcpkg 运行时 DLL：
+Copy-Item "E:\Tools\vcpkg\installed\x64-windows\bin\*.dll" .\build\win-release\ -Force
+
+启动：.\build\win-release\FinceptTerminal.exe
+
+
+
+
+
+```
+
+## 安装FinceptTerminal 股票项目-debug
+
+```
+cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+$env:QT_DIR="E:\Qt\Qt5.12\6.10.2\msvc2022_64"
+$env:VCPKG_ROOT="E:\Tools\vcpkg"
+$env:OPENSSL_ROOT_DIR="$env:VCPKG_ROOT\installed\x64-windows"
+$env:ZLIB_ROOT="$env:VCPKG_ROOT\installed\x64-windows"
+
+$env:PATH="$env:OPENSSL_ROOT_DIR\bin;$env:QT_DIR\bin;$env:PATH"
+
+Remove-Item -Recurse -Force .\build\win-debug -ErrorAction SilentlyContinue
+
+cmake -B build\win-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug `
+  -DCMAKE_PREFIX_PATH="$env:QT_DIR" `
+  -DCMAKE_MODULE_PATH="E:/WorkSpace/QT-Github/FinceptTerminal-main/fincept-qt/build/win-release/_deps/qtads-src/cmake/modules" `
+  -DQt6_DIR="$env:QT_DIR\lib\cmake\Qt6" `
+  -DFINCEPT_ALLOW_QT_DRIFT=ON `
+  -DFINCEPT_QT_PIN_MODE=ANY `
+  -DOPENSSL_ROOT_DIR="$env:OPENSSL_ROOT_DIR" `
+  -DOPENSSL_INCLUDE_DIR="$env:OPENSSL_ROOT_DIR\include" `
+  -DOPENSSL_SSL_LIBRARY="$env:OPENSSL_ROOT_DIR\lib\libssl.lib" `
+  -DOPENSSL_CRYPTO_LIBRARY="$env:OPENSSL_ROOT_DIR\lib\libcrypto.lib" `
+  -DZLIB_INCLUDE_DIR="$env:ZLIB_ROOT\include" `
+  -DZLIB_LIBRARY="$env:ZLIB_ROOT\debug\lib\zd.lib" `
+  -DFETCHCONTENT_SOURCE_DIR_QTADS="E:/WorkSpace/QT-Github/FinceptTerminal-main/fincept-qt/build/win-release/_deps/qtads-src" `
+  -DFETCHCONTENT_SOURCE_DIR_MD4C="E:/WorkSpace/QT-Github/FinceptTerminal-main/fincept-qt/build/win-release/_deps/md4c-src" `
+  -DFETCHCONTENT_SOURCE_DIR_QGEOVIEW="E:/WorkSpace/QT-Github/FinceptTerminal-main/fincept-qt/build/win-release/_deps/qgeoview-src"
+  
+  
+  检查Versioning.cmake 在不在
+  
+  cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+Get-ChildItem ".\build\win-release\_deps\qtads-src" -Recurse -Filter "Versioning.cmake" |
+  Select-Object FullName
+  
+  Release 能运行，Release 目录里大概率已经有 qgeoview-src
+  cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+Test-Path ".\build\win-release\_deps\qgeoview-src"
+Test-Path ".\build\win-release\_deps\qtads-src"
+Test-Path ".\build\win-release\_deps\md4c-src"
+
+
+以后只修改 C++ 代码时，用这个更快
+cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+$env:QT_DIR="E:\Qt\Qt5.12\6.10.2\msvc2022_64"
+$env:VCPKG_ROOT="E:\Tools\vcpkg"
+$env:OPENSSL_ROOT_DIR="$env:VCPKG_ROOT\installed\x64-windows"
+$env:PATH="$env:OPENSSL_ROOT_DIR\bin;$env:QT_DIR\bin;$env:PATH"
+
+cmake --build build\win-debug --parallel 4
+
+启动 Debug 程序命令
+    先复制 vcpkg 的 DLL
+    cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+    $env:VCPKG_ROOT="E:\Tools\vcpkg"
+
+    Copy-Item "$env:VCPKG_ROOT\installed\x64-windows\bin\*.dll" .\build\win-debug\ -Force -ErrorAction SilentlyContinue
+    Copy-Item "$env:VCPKG_ROOT\installed\x64-windows\debug\bin\*.dll" .\build\win-debug\ -Force -ErrorAction SilentlyContinue
+    然后启动
+	cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+	.\build\win-debug\FinceptTerminal.exe
+带代理启动 Debug
+	cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
+
+    $env:HTTP_PROXY="http://127.0.0.1:7897"
+    $env:HTTPS_PROXY="http://127.0.0.1:7897"
+
+    .\build\win-debug\FinceptTerminal.exe
+```
+
+
+
 ## 掌握技能点
 
 ```
@@ -10,9 +161,6 @@ TCP/UDP通信：掌握QTcpSocket、QUdpSocket的用法，实现客户端与服�
 QThread与QRunnable：创建线程，实现任务分发。
 线程同步：使用QMutex、QWaitCondition等工具避免资源竞争。
 
-
-vs2022 切换arm 的版本。
-& "E:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -HostArch amd64
 ```
 
 
