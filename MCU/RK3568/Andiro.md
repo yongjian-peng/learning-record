@@ -58,17 +58,17 @@ kernel
 
 ![image_001](./Andiro.assets/image_001.png)
 
-![image-20260412102019740](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412102019740.png)
+![image-20260412102019740](./Andiro.assets/image-20260412102019740.png)
 
 
 
 #### uboot 编译
 
-![image-20260412105726051](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412105726051.png)
+![image-20260412105726051](./Andiro.assets/image-20260412105726051.png)
 
 #### 单独编译 安卓 内核源码
 
-![image-20260412201016834](D:\WorkSpace\Git\learning-record\MCU\RK3568\Andiro.assets\image-20260412201016834.png)
+![image-20260412201016834](./Andiro.assets/image-20260412201016834.png)
 
 
 

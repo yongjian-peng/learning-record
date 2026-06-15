@@ -318,6 +318,6 @@ gst-launch-1.0 filesrc location=test.mp4 ! qtdemux ! queue ! h264parse ! mppvide
 
 gst-inspect-1.0 |grep mpp
 
-![image-20260411170509728](E:\Git\learning-record\Linux\Command\assets\image-20260411170509728.png)
+![image-20260411170509728](./assets/image-20260411170509728.png)
 
 ```

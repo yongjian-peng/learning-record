@@ -20,7 +20,7 @@
 总体架构
 ```
 
-![image-20260522175244883](E:\Git\learning-record\Prompt\Project\assets\image-20260522175244883.png)、
+![image-20260522175244883](./assets/image-20260522175244883.png)、
 
 ```
 

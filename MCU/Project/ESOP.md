@@ -62,7 +62,7 @@ https://github.com/igordanchenko/react-photo-album
 
 #### 首页展示
 
-![image-20260421093617199](./\Project\assets\image-20260421093617199.png)
+![image-20260421093617199](./assets/image-20260421093617199.png)
 
 报工：数量，良率。
 
