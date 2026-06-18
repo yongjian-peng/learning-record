@@ -1,14 +1,37 @@
+# 配置说明
+
+```
+ENABLE_INFLUX=true、INFLUX_BUCKET=metrics 没问题。
+Agent payloadVersion=v2、emitLegacyFlatMetrics=false 没问题，后端负责展平写入。
+
+sensors.gpu.amd.collector  adlx
+amd.collector=libreHardwareMonitor
+AMD=LHM
+QT_QPA_PLATFORM=offscreen
+```
+
+
+
 # 待完成的需求：
 
 ```
-1. 监控指标的范围报警设置，通过数据库获取，并使用数据库配置。并验证测试。
 2. 后端管理系统，权限用户页面逻辑。
 3. 后端页面 tree.js 3D 动态图展示。
-4. 后端页面 UI 重新设计一版。
-5. QT 页面数据使用第一个页面数据，其他的给删除掉。
-6. 发现了问题，发送开启指令不生效了。需要修复。
 7. 后端需要设置，管理开启软件的功能，能够选择，需要从数据库中获取，然后再发送开启或者停止指令。
-8. 后端 echarts 图，可以选查看据图的那个指标。显示和隐藏。
+
+10. cpu测试 内存测试 网络测试 磁盘测试 当压测时候，能保证采集到数据。配置压测到 90% 如果有 100% 的情况，则停止采集数据。 OK 待验证
+11. 将项目打包成服务，安装到 windows 注册表中，简单部署。并在测试机上运行。
+12. influxdb 数据怎么优化，保证服务正常使用。
+13. 历史曲线中的 报表曲线图数据不完整，修复。
+14. qt 链接 backend_python_api 服务失败的时候，应该保持一定频率的请求连接。确认服务是否可用。并更新状态。
+
+
+9. 将执行命令的操作，统一使用 trace_id 当做主键，记录生命周期的日志，后期排查问题使用。 OK 发布规则，和启动关闭软件
+1. 监控指标的范围报警设置，通过数据库获取，并使用数据库配置。并验证测试。OK 测试内存到达后，关闭软件。
+4. 后端页面 UI 重新设计一版。 OK 
+5. QT 页面数据使用第一个页面数据，其他的给删除掉。 OK 
+6. 发现了问题，发送开启指令不生效了。需要修复。 OK
+8. 后端 echarts 图，可以选查看据图的那个指标。显示和隐藏。 OK
 
 流程：
 开启客户端软件 -> 填写 服务器 IP 地址 -> 链接 推送到 python_api 数据 -> 保存数据。
@@ -17,6 +40,8 @@
 python_api 开启软件指令 到执行指令 到执行动作，到反馈结果的流程图。
 vue_admin 开启软件指令 到开启软件的流程。
 有关所有 mqtt 订阅和发布的流程图。
+
+但现有仓库可能已经有一部分报警执行骨架。我先确认哪些能力已存在、哪些只是占位，避免重复建表或破坏当前压力控制链路。而不是重写一套重复实现
 ```
 
 
@@ -99,6 +124,12 @@ FastAPI 后端
 InfluxDB
         ↓ REST / WebSocket
 Qt/QML 客户端、Vue 管理端显示
+
+将整个日志生成一个 类似于 唯一的 trace_id 并将整个链路串起来。设计一个最小改动的方法。
+后端发布规则 更新到报警规则后，怎么保证执行成功，并且有迹可查日志。方便定位问题。
+开启测试软件，初始化测试软件，关闭测试软件 怎么保证执行成功，并有迹可查日志。方便定位问题。
+
+后端规则发布 /api/alarm/rules/publish
 ```
 
 
@@ -134,8 +165,13 @@ Qt/QML 客户端、Vue 管理端显示
 
 ```
 更新
+cd E:\WorkSpace\CRM
+
 # 查看帮助
 .\scripts\dev.ps1 -Action help
+
+.\scripts\dev.ps1 -Action agent-stop
+.\scripts\dev.ps1 -Action start -Target agent
 
 # 编译 Agent 并测试
 .\scripts\dev.ps1 -Action build -Target agent -RunTests
@@ -155,6 +191,27 @@ Qt/QML 客户端、Vue 管理端显示
 # 编译并启动全部项目
 .\scripts\dev.ps1 -Action dev -Target all
 
+
+# 搜索日志命令 启动或者关闭命令
+Select-String -Path "03_backend_python_api\logs\*.log","02_agent_core_cpp\logs\*.log","C:\ProgramData\CRMStressPlatform\logs\*.log" -Pattern "cmd-xxxx"
+$tid = "cmd-b6e601ba8fc1"
+Select-String -Path `
+  "E:\WorkSpace\CRM\03_backend_python_api\logs\backend.log", `
+  "C:\ProgramData\CRMStressPlatform\logs\aging-agent.log" `
+  -Pattern "$tid|COMMAND_|PERFORMANCE_STATUS_|MQTT_ACK_RECEIVED|AGENT_COMMAND_ACK_SEND"
+
+
+# 搜索日志命令 报警发布规则命令
+ Select-String -Path `
+  "03_backend_python_api\logs\backend.log", `
+  "C:\ProgramData\CRMStressPlatform\logs\aging-agent.log" `
+  -Pattern "ALARM_RULES_"
+  
+$tid = "alarm-rules-1781677869185"
+Select-String -Path `
+  "03_backend_python_api\logs\backend.log", `
+  "C:\ProgramData\CRMStressPlatform\logs\aging-agent.log" `
+  -Pattern $tid
 
 
 - `01_qt_qml_client`
@@ -266,6 +323,39 @@ Invoke-RestMethod `
   -Method Get `
   -Uri "$INFLUX_URL/api/v2/buckets?orgID=$ORG_ID" `
   -Headers $headers | ConvertTo-Json -Depth 10
+  
+  
+  
+  
+  001 启动命令
+  - `01_qt_qml_client`
+cd E:\WorkSpace\CRM001\01_qt_qml_client
+$env:PATH='E:\Qt\Qt5.12\Tools\mingw1310_64\bin;E:\Qt\Qt5.12\6.10.2\mingw_64\bin;C:\ninja;' + $env:PATH
+& 'E:\Qt\Qt5.12\Tools\CMake_64\bin\cmake.exe' -S . -B build -G Ninja -DCMAKE_PREFIX_PATH='E:\Qt\Qt5.12\6.10.2\mingw_64'
+& 'E:\Qt\Qt5.12\Tools\CMake_64\bin\cmake.exe' --build build
+
+.\build\aging_qt_client.exe
+
+
+- `02_agent_core_cpp`
+cd E:\WorkSpace\CRM001\02_agent_core_cpp
+$env:PATH='E:\Qt\Qt5.12\Tools\mingw1310_64\bin;C:\ninja;' + $env:PATH
+cmake -S . -B build -G Ninja
+cmake --build build
+ctest --test-dir build --output-on-failure
+
+.\build\aging-agent.exe --console --config .\config\agent_config.json
+.\build\aging-agent.exe --once --config .\config\agent_config.json
+
+
+- `03_backend_python_api`
+powershell
+cd E:\WorkSpace\CRM001\03_backend_python_api
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+Copy-Item .env.example .env
+.\scripts\run_dev.ps1
 
 
 

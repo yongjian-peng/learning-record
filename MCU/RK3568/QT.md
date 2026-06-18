@@ -249,6 +249,12 @@ make
 	
 cat /etc/xdg/weston/weston.ini.d/06-mpv-player.ini
 
+
+# 设置所有可执行文件和动态库的输出目录为同一个 bin 目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
 ```
 
 

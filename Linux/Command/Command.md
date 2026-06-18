@@ -1,3 +1,22 @@
+# Ponytail  AI编程助手
+
+```
+| Codex 里输入          | 用途                       |
+| ------------------ | ------------------------ |
+| `@ponytail`        | 启用最小实现思路                 |
+| `@ponytail lite`   | 轻度约束，少量提醒                |
+| `@ponytail full`   | 默认强度                     |
+| `@ponytail ultra`  | 强力删除过度设计                 |
+| `@ponytail off`    | 关闭                       |
+| `@ponytail-review` | 审查当前 diff，给出可删清单         |
+| `@ponytail-audit`  | 审计整个仓库                   |
+| `@ponytail-debt`   | 收集 `ponytail:` 注释形成技术债清单 |
+| `@ponytail-help`   | 查看帮助                     |
+
+```
+
+
+
 # 用 Hugging Face CLI 下载完整模型
 
 ```
