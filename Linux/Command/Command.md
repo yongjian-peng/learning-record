@@ -39,6 +39,23 @@ $env:HTTPS_PROXY="http://127.0.0.1:7897"
 然后执行：
 hf download google/gemma-4-31B-it --repo-type model --local-dir E:\Models\gemma-4-31B-it
 
+
+ 1：使用 CLI 登录，推荐
+
+安装或更新 Hugging Face Hub：
+
+pip install -U huggingface_hub
+
+登录：
+
+hf auth login
+
+然后粘贴你的 Hugging Face Access Token。
+
+验证：
+
+hf auth whoami
+
 ```
 
 
@@ -233,6 +250,16 @@ $env:HTTPS_PROXY="http://127.0.0.1:7897"
 $env:ALL_PROXY="socks5://127.0.0.1:7897"
 
 
+把 master 合并进 main
+git fetch origin
+git switch main
+git pull --ff-only origin main
+然后执行允许无关历史合并：
+git merge origin/master --allow-unrelated-histories
+如果没有冲突，Git 会生成一个 merge commit。然后推送
+git push origin main
+
+
 ```
 
 
@@ -313,6 +340,11 @@ docker ps
  docker compose -f docker-compose.yml -f docker-compose.influxdb-emqx.yml up -d influxdb emqx
  
  docker compose -f docker-compose.yml -f docker-compose.influxdb-emqx.yml up -d  emqx
+ 
+ 
+ docker compose -f docker-compose.yml -f docker-compose.libretranslate.yml up -d --build libretranslate
+ 
+ docker compose -f docker-compose.yml -f docker-compose.libretranslate.yml restart libretranslate
 
 ```
 

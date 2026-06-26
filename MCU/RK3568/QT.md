@@ -1,3 +1,25 @@
+## 数据大屏
+
+```
+142.psd 156.psd 149.psd
+
+009%20某公司大数据监控平台
+016 广西矿产资源大数据监管平台
+\033 数据可视化页面设计
+035 视频监控前后台通用模板
+045 信用风险定位系统(银行版)
+051 通用大数据可视化展示平台模板
+058 大屏数据智慧中心统计
+075 数据可视化展示
+
+这些目前是“近似画法”，不是按目标图精确复刻。接下来我用图片本身取尺寸和颜色采样。
+并且 CMake 要有 windeployqt， 不能跳过真实的 ECharts ，图标可以用 Canvas 画同款图表 ，使用 mock 模拟数据。
+```
+
+
+
+
+
 ## 安装FinceptTerminal 股票项目-release
 
 ```
@@ -74,6 +96,8 @@ Copy-Item "E:\Tools\vcpkg\installed\x64-windows\bin\*.dll" .\build\win-release\ 
 ## 安装FinceptTerminal 股票项目-debug
 
 ```
+pyj3290888673@gamil.com  Peter868886**  125858
+
 cd E:\WorkSpace\QT-Github\FinceptTerminal-main\fincept-qt
 
 $env:QT_DIR="E:\Qt\Qt5.12\6.10.2\msvc2022_64"
