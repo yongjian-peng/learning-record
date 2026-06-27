@@ -17,6 +17,113 @@ QT_QPA_PLATFORM=offscreen
 
 
 
+```
+2026-06-27 08:29:57,198 INFO [app.services.device_service] DEVICE_BASIC_INFO_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:29:57,198 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+[32mINFO[0m:     192.168.31.206:50656 - "[1mGET /api/devices/device-crm/basic-info HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     192.168.31.206:50655 - "[1mGET /api/devices/device-crm HTTP/1.1[0m" [32m200 OK[0m
+2026-06-27 08:29:57,207 INFO [app.services.device_service] DEVICES_DB_QUERY deviceId=* count=9 found=True
+[32mINFO[0m:     192.168.31.206:50649 - "[1mGET /api/devices HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     192.168.31.206:50651 - "[1mGET /api/tasks HTTP/1.1[0m" [32m200 OK[0m
+2026-06-27 08:29:57,270 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:29:57,280 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2117
+2026-06-27 08:29:57,280 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520197225 metricGroupCount=6 issueCount=6
+[32mINFO[0m:     192.168.31.206:51949 - "WebSocket /ws/agent/device-crm" [accepted]
+2026-06-27 08:29:57,429 INFO [app.main] Alarm agent WebSocket connected deviceId=device-crm
+[32mINFO[0m:     connection open
+2026-06-27 08:29:58,184 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:29:58,195 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
+2026-06-27 08:29:58,367 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:29:58,377 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2118
+2026-06-27 08:29:58,377 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520198322 metricGroupCount=6 issueCount=6
+2026-06-27 08:29:59,470 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:29:59,479 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2122
+2026-06-27 08:29:59,479 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520199425 metricGroupCount=6 issueCount=6
+[32mINFO[0m:     192.168.31.206:50659 - "[1mGET /api/telemetry/latest/device-crm?format=v2 HTTP/1.1[0m" [32m200 OK[0m
+2026-06-27 08:30:00,195 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:00,196 INFO [app.services.device_service] DEVICE_BASIC_INFO_DB_QUERY deviceId=device-crm count=1 found=True
+[32mINFO[0m:     192.168.31.206:50655 - "[1mGET /api/devices/device-crm HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     192.168.31.206:50656 - "[1mGET /api/devices/device-crm/basic-info HTTP/1.1[0m" [32m200 OK[0m
+2026-06-27 08:30:00,204 INFO [app.services.device_service] DEVICES_DB_QUERY deviceId=* count=9 found=True
+[32mINFO[0m:     192.168.31.206:50649 - "[1mGET /api/devices HTTP/1.1[0m" [32m200 OK[0m
+[32mINFO[0m:     192.168.31.206:50651 - "[1mGET /api/tasks HTTP/1.1[0m" [32m200 OK[0m
+2026-06-27 08:30:00,768 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:00,779 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=1772
+2026-06-27 08:30:00,780 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520200723 metricGroupCount=6 issueCount=2
+2026-06-27 08:30:28,816 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,816 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,842 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,862 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,878 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,843 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,843 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,844 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2109
+2026-06-27 08:30:30,845 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
+2026-06-27 08:30:30,871 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,871 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
+2026-06-27 08:30:30,888 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,888 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2111
+2026-06-27 08:30:30,924 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,925 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
+2026-06-27 08:30:30,940 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,940 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
+2026-06-27 08:30:30,956 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,956 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2111
+2026-06-27 08:30:30,972 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,972 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,973 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:30,973 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
+2026-06-27 08:30:30,973 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
+2026-06-27 08:30:30,974 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2109
+2026-06-27 08:30:32,873 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:32,876 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:32,901 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:34,917 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:34,917 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:34,918 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-27 08:30:34,918 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2113
+2026-06-27 08:30:34,918 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
+2026-06-27 08:30:34,920 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2110
+2026-06-27 08:30:42,250 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
+```
+
+
+
 # 待完成的需求：
 
 ```
@@ -26,13 +133,13 @@ QT_QPA_PLATFORM=offscreen
 16. 将日志文件，每天固定时间给打包成一个文件。
 17. 删除安装包时候，将配置文件和log 也一起删除掉。
 7. 后端需要设置，管理开启软件的功能，能够选择，需要从数据库中获取，然后再发送开启或者停止指令。
-20. 历史曲线页面的宽度没有自适应，目前比较宽，搜索条件，和列表都修复正常显示。
-22. 主机信息中的详情，不用弹框方式，改为打开新的页面。
 23. 将监控指标，做成可视化。
 24. 可以控制压力测试的时间。兼容批量设置时间。保证服务正常运行。运行一个脚本文件，监听任务是否到期，到期的话，则执行关闭压力测试的动作。
 25. 使用 windows 环境 部署 python 和 vue 项目。
-26. 
-
+26. 使用 LibreHardwareMonitor Bridge 将硬盘的温度采集到。读取 HDD / SSD / NVMe 温度， 要重新做一套硬盘温度采集，直接扩展现有的. LibreHardwareMonitor Bridge。 就是在 crm_lhm_bridge.dll 里面增加 Storage / HDD / SSD / NVMe 的枚举，把硬盘温度返回给 Agent Core。
+新增硬盘温度的指标和数据结构，兼容之前 CPU 温度格式。保存到 influxdb 数据库中。并在 qt_qml_client 实时信息 和 web_admin_vue 列表详情，实时信息 显示出来。在历史数据中，温度显示这一项，也新增硬盘温度 Echarts。采集频率参考 CPU 温度频率即可。保证系统稳定运行。
+27. 当api 服务不可用，或者 mqtt 不可用，或者 influxdb 不可用的时候，则做出止损的动作，应该怎么设计比较合理。
+	01_qt_qml_client 02_agent_core_cpp 部署客户端 03_backend_python_api 04_web_admin_vue 部署在服务器
  
 
 
@@ -51,7 +158,9 @@ QT_QPA_PLATFORM=offscreen
 14. qt 链接 backend_python_api 服务失败的时候，应该保持一定频率的请求连接。确认服务是否可用。并更新状态。OK
 2. 后端管理系统，权限用户页面逻辑。OK
 12. influxdb 数据怎么优化，保证服务正常使用。OK 
-21. 优化，显示的采集到的数据，使用保留两位小数，计算的百分比也是保留两位。扫描整个项目。从数据采集到保存到 influxdb 数据库。我理解采集处理好了，就不需要处理显示了
+21. 优化，显示的采集到的数据，使用保留两位小数，计算的百分比也是保留两位。扫描整个项目。从数据采集到保存到 influxdb 数据库。我理解采集处理好了，就不需要处理显示了 OK
+22. 主机信息中的详情，不用弹框方式，改为打开新的页面。 OK
+20. 历史曲线页面的宽度没有自适应，目前比较宽，搜索条件，和列表都修复正常显示。 OK 
 
 流程：
 开启客户端软件 -> 填写 服务器 IP 地址 -> 链接 推送到 python_api 数据 -> 保存数据。
