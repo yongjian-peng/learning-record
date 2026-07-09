@@ -13,134 +13,79 @@ QT_QPA_PLATFORM=offscreen
 不用 Redis/Celery，不新增服务；在 FastAPI 启动时跑一个后台 loop，扫描到期任务，复用现有 performance.stop 和 performance.close。
 方案 B：外部队列/定时器服务。可靠但太重，当前 200 台规模没必要。
 方案 C：让 Agent 自己按时关闭。后端不可统一审计、重试和失败落库，不适合这次需求。
+
+# /***************************************
+# 函数名 ：xxx
+# 函数功能 ：一句话说明业务目的
+# 函数参数 ：
+# 参数名：说明该参数的业务含义、用途、约束及是否可为空。不要业务入参文字，给到具体的业务说明。
+# 函数返回值 ：说明成功、未找到、异常或无效输入时的返回语义。
+# 函数描述 ：
+# 说明函数从哪里获取或检查数据；
+# 说明采用哪些条件、顺序或规则进行处理；
+# 说明命中、未命中及异常情况下的行为；
+# 说明是否产生状态修改或其他副作用。
+# 注意事项 ：说明调用方需要关注的边界条件；无法确认的内容标记为“需确认”。
+# ***************************************/
+
+如果修改影响到了编译发布的逻辑，修改时注意不要漏掉之前的逻辑。
+- 新增函数：100% 必须有完整注释
+- 修改函数：若原注释不完整，必须同步完善
+- 新增类：100% 必须有类说明
+- 新增文件：100% 必须有文件头说明
+- 新增 API：100% 必须有接口文档
+- 新增数据库表：100% 必须说明字段含义
+- 新增配置项：100% 必须说明用途、默认值、取值范围
+- 文件建议<=500行；函数建议<=80行。
+- 超 600 行业务文件拆分后的模块职责。
+- 全项目统一命名、日志、异常、类型注解、Docstring、Import 顺序。
+- 中文注释，使用utf-8 中文编码格式。无乱码。
+将这次修改同步到 docs CRM 整体梳理 .md 文件中。
+def xxx(...):
+
+业务入参
+
+每次编写函数，都需要加上对应的注释。核心代码加上注释。
+
+
+P0：采集 pipeline 多窗口合并写 InfluxDB。
+P1：dispatch 阶段批量插入 CommandRecord、批量更新 TestTaskDevice，但保持 MQTT 逐台节流。
+P2：批次广播降频。
+P3：_persist_start_batch() 的 add_all() 小优化。
 ```
-
-
-
-```
-2026-06-27 08:29:57,198 INFO [app.services.device_service] DEVICE_BASIC_INFO_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:29:57,198 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-[32mINFO[0m:     192.168.31.206:50656 - "[1mGET /api/devices/device-crm/basic-info HTTP/1.1[0m" [32m200 OK[0m
-[32mINFO[0m:     192.168.31.206:50655 - "[1mGET /api/devices/device-crm HTTP/1.1[0m" [32m200 OK[0m
-2026-06-27 08:29:57,207 INFO [app.services.device_service] DEVICES_DB_QUERY deviceId=* count=9 found=True
-[32mINFO[0m:     192.168.31.206:50649 - "[1mGET /api/devices HTTP/1.1[0m" [32m200 OK[0m
-[32mINFO[0m:     192.168.31.206:50651 - "[1mGET /api/tasks HTTP/1.1[0m" [32m200 OK[0m
-2026-06-27 08:29:57,270 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:29:57,280 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2117
-2026-06-27 08:29:57,280 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520197225 metricGroupCount=6 issueCount=6
-[32mINFO[0m:     192.168.31.206:51949 - "WebSocket /ws/agent/device-crm" [accepted]
-2026-06-27 08:29:57,429 INFO [app.main] Alarm agent WebSocket connected deviceId=device-crm
-[32mINFO[0m:     connection open
-2026-06-27 08:29:58,184 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:29:58,195 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
-2026-06-27 08:29:58,367 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:29:58,377 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2118
-2026-06-27 08:29:58,377 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520198322 metricGroupCount=6 issueCount=6
-2026-06-27 08:29:59,470 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:29:59,479 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2122
-2026-06-27 08:29:59,479 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520199425 metricGroupCount=6 issueCount=6
-[32mINFO[0m:     192.168.31.206:50659 - "[1mGET /api/telemetry/latest/device-crm?format=v2 HTTP/1.1[0m" [32m200 OK[0m
-2026-06-27 08:30:00,195 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:00,196 INFO [app.services.device_service] DEVICE_BASIC_INFO_DB_QUERY deviceId=device-crm count=1 found=True
-[32mINFO[0m:     192.168.31.206:50655 - "[1mGET /api/devices/device-crm HTTP/1.1[0m" [32m200 OK[0m
-[32mINFO[0m:     192.168.31.206:50656 - "[1mGET /api/devices/device-crm/basic-info HTTP/1.1[0m" [32m200 OK[0m
-2026-06-27 08:30:00,204 INFO [app.services.device_service] DEVICES_DB_QUERY deviceId=* count=9 found=True
-[32mINFO[0m:     192.168.31.206:50649 - "[1mGET /api/devices HTTP/1.1[0m" [32m200 OK[0m
-[32mINFO[0m:     192.168.31.206:50651 - "[1mGET /api/tasks HTTP/1.1[0m" [32m200 OK[0m
-2026-06-27 08:30:00,768 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:00,779 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=1772
-2026-06-27 08:30:00,780 INFO [app.services.telemetry_service] telemetry saved deviceId=device-crm taskId= timestamp=1782520200723 metricGroupCount=6 issueCount=2
-2026-06-27 08:30:28,816 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,816 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,842 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,862 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,878 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:28,879 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,843 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,843 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,844 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2109
-2026-06-27 08:30:30,845 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
-2026-06-27 08:30:30,871 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,871 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
-2026-06-27 08:30:30,888 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,888 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2111
-2026-06-27 08:30:30,924 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,925 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
-2026-06-27 08:30:30,940 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,940 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
-2026-06-27 08:30:30,956 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,956 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2111
-2026-06-27 08:30:30,972 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,972 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,973 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:30,973 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
-2026-06-27 08:30:30,973 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2112
-2026-06-27 08:30:30,974 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2109
-2026-06-27 08:30:32,873 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:32,876 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:32,901 WARNING [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=0 found=False error=(pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:34,917 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:34,917 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:34,918 WARNING [app.services.device_service] Save heartbeat for device-crm to MySQL failed, fallback to memory: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on '192.168.31.224' (timed out)")
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-2026-06-27 08:30:34,918 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2113
-2026-06-27 08:30:34,918 INFO [app.mqtt.mqtt_consumer] WS_PUSH type=device_status deviceId=device-crm traceId=
-2026-06-27 08:30:34,920 INFO [app.mqtt.mqtt_consumer] MQTT telemetry received topic=telemetry/device-crm/realtime deviceId=device-crm taskId= metricCount=51 payloadBytes=2110
-2026-06-27 08:30:42,250 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-2026-06-27 08:30:42,251 INFO [app.services.device_service] DEVICE_DETAIL_DB_QUERY deviceId=device-crm count=1 found=True
-```
-
-
 
 # 待完成的需求：
 
 ```
 
 3. 后端页面 tree.js 3D 动态图展示。
-15. agent_core 记录的日志，转成时间格式。格式化一下。
-16. 将日志文件，每天固定时间给打包成一个文件。
+16. 将日志文件，每天固定时间给打包成一个文件。并压缩文件。以 tar.gz 格式压缩。
 17. 删除安装包时候，将配置文件和log 也一起删除掉。
 7. 后端需要设置，管理开启软件的功能，能够选择，需要从数据库中获取，然后再发送开启或者停止指令。
 23. 将监控指标，做成可视化。
-24. 可以控制压力测试的时间。兼容批量设置时间。保证服务正常运行。运行一个脚本文件，监听任务是否到期，到期的话，则执行关闭压力测试的动作。
-25. 使用 windows 环境 部署 python 和 vue 项目。
 26. 使用 LibreHardwareMonitor Bridge 将硬盘的温度采集到。读取 HDD / SSD / NVMe 温度， 要重新做一套硬盘温度采集，直接扩展现有的. LibreHardwareMonitor Bridge。 就是在 crm_lhm_bridge.dll 里面增加 Storage / HDD / SSD / NVMe 的枚举，把硬盘温度返回给 Agent Core。
 新增硬盘温度的指标和数据结构，兼容之前 CPU 温度格式。保存到 influxdb 数据库中。并在 qt_qml_client 实时信息 和 web_admin_vue 列表详情，实时信息 显示出来。在历史数据中，温度显示这一项，也新增硬盘温度 Echarts。采集频率参考 CPU 温度频率即可。保证系统稳定运行。
-27. 当api 服务不可用，或者 mqtt 不可用，或者 influxdb 不可用的时候，则做出止损的动作，应该怎么设计比较合理。
-	01_qt_qml_client 02_agent_core_cpp 部署客户端 03_backend_python_api 04_web_admin_vue 部署在服务器
- 
+27. 当python_api 服务不可用，或者 mqtt 不可用，或者 influxdb 不可用的时候，则做出止损的动作，应该怎么设计比较合理。如果python_api 不可用的话，则当前客户端在执行的任务。怎么处理。 api 已不可用的话。api 是关键，很多功能都需要提供。怎么解决比较好。01_qt_qml_client 02_agent_core_cpp 部署客户端 03_backend_python_api 04_web_admin_vue 部署在服务器
+31. 任务设置优先级 客户端心跳包，保存配置，保存采集数据。
+37. 读取 scripts 目录的 安装 01 和 02 环境的脚本。计划将分三步进行。注意配置文件的位置，修改后，验证是否正确。
+	1. 将 01 和 02 项目 编译到一个文件夹中，并且将 BurnInTest （E:\Program Files\BurnInTest）也放入到这个目录中。相关配置文件，相关验证时间的文件。
+	2. 开启软件的话，直接点击软件图标。就开启 qt 和 agent 两个软件，退出的话，则是退出  qt 和 agent 两个软件。
+	3. 生成绿色版本的配置，直接就是将绿色版的文件夹，压缩后，直接复制到另外的设备上，就傻瓜式直接运行即可。
+38. qt_qml_client logo 图标重新修改。
+39. 后端首页优化布局。设计一个首页。
+40. 后端单个测试，和批量测试的话，记录历史记录表。记录状态，老化时间。就和主机信息中的状态更新的复制版。就是历史数据。将 task 任务显示出来后端显示。
+41. 设计一个方案。后端新增设备组，就是批次号表，设备表新增批次号字段。还是记录到device_config 表中。在 qt_client 界面 将 位置改成批次号。进入设置页面先获取批次号的列表。提供可以选择的下拉框，下拉框可以搜索。将批次号作为一个统计的单位。按照批次号。统计设备的数量，在 admin/home 区域设备分布图形展示。
+修改的地方，牵扯到整个项目。先编写计划，确认后，再编写代码实现。
+42. 目前文件日志文件分散到 C 盘目录中，怎么修改将日志文件和配置文件，保存到拷贝文件的同级目录中。怎么修改。 
+目前生成的最新的 CRMStressPlatform.cmd 文件，双击，打不开软件。
+再 qt_qml_client 设置 点击了确定，最后，写入配置文件到本地目录的时候，写入的 emqx 修复这个问题，应该和 linux 环境有关系。 "mqtt": {
+        "host": "emqx",
+        "password": "public123456",
+        "port": 1883,
+        "username": "admin"
+    }
+修复这个三个问题，先编写计划，再修复问题。
+43.
 
 
 
@@ -160,7 +105,19 @@ QT_QPA_PLATFORM=offscreen
 12. influxdb 数据怎么优化，保证服务正常使用。OK 
 21. 优化，显示的采集到的数据，使用保留两位小数，计算的百分比也是保留两位。扫描整个项目。从数据采集到保存到 influxdb 数据库。我理解采集处理好了，就不需要处理显示了 OK
 22. 主机信息中的详情，不用弹框方式，改为打开新的页面。 OK
-20. 历史曲线页面的宽度没有自适应，目前比较宽，搜索条件，和列表都修复正常显示。 OK 
+20. 历史曲线页面的宽度没有自适应，目前比较宽，搜索条件，和列表都修复正常显示。 OK
+28. 设计一个方案，扫码枪方案。 OK 
+34. 设计一个方案。将 qt_qml_client 程序。启动时候，新增一个逻辑。判断当前日志和文件写入的日期的差值，当大于半年后。则开启后，提示请激活工具。然后关闭程序。保存日期的文件。是在安装的本地目录中。这个文件需要手动更新。不用自动更新。文件日期需要使用 RSA 非对称加密。使用私钥加密，程序使用公钥解密后，才能获取到日期，使用 OPENSSL_PKCS1_PADDING 填充个标志 然后对比。这个方法放在入口函数 main 中。创建一个单独的文件。执行这个业务需求。公钥和私钥E:\WorkSpace\CRM\generate_rsa_key_pair 文件中。将公钥写在配置文件中。将公钥使用 base64 转成字符串。私钥待加密的格式是 json {"timestamp":1796267012000} 是13位时间戳。获取本机的时间。对比如果小于时间则弹出提示，并关闭软件，当有网络的时候，获取网络的时间，不获取本机的时间戳。如果没有网络的时候则使用本机的时间。 OK 
+36. Qt 配置注册设备 ID，条件是 device_node 存在，并且 device_config 中存在非空 clientType 配置痕迹，则不请求自动上报采集数据。 OK
+35. 新增部署脚本，将 01_qt_qml_client\generate_rsa_key_pair\activation.lic 文件，编译时候，放入到 build\CRMStressStation\client 文件夹中，保证不提示 请激活工具。请激活工具页面设计一款。 OK 
+32. 后端写入采集数据时候，批量整合后，聚合再一次写入多次采集数据。根据实际情况，来优化。先梳理整个同步异步的流程。确认后，再分析哪里可以优化成批量写入数据。OK 
+29. 设计一个客户端应用程序，需要过期机制，每半年执行一次日期验证升级到最新的日期。如果到期后，则提示授权。 OK 
+34. 后端环境部署，使用 windows 还是 linux 部署 docker OK
+33. 批量操作设备时候，更新数据库，也是将这个批次的数据。一次写入多条数据。先梳理整个同步异步的流程。确认后，再分析哪里可以优化成批量写入数据。OK 
+30. 设计方案，编写流程架构图。OK 
+25. 使用 windows 环境 部署 python 和 vue 项目。不需要
+24. 可以控制压力测试的时间。兼容批量设置时间。保证服务正常运行。运行一个脚本文件，监听任务是否到期，到期的话，则执行关闭压力测试的动作。OK
+15. agent_core 记录的日志，转成时间格式。格式化一下。OK
 
 流程：
 开启客户端软件 -> 填写 服务器 IP 地址 -> 链接 推送到 python_api 数据 -> 保存数据。
@@ -181,7 +138,19 @@ vue_admin 开启软件指令 到开启软件的流程。
 
 目前的客户端量是 200台设备同时测试并在服务器上监控 部署 01_qt_qml_client 和02_agent_core_cpp  服务器是单独的机器 部署 03_backend_python_api和04_web_admin_vue 是这么计划的。评估 websocker mqtt  client 和 数据 influxdb 保存数据 7天的风险。有哪些？先评估，做计划，然后再编写代码
 
+28. 目前已经有了 扫码枪，扫码枪扫描每台设备出货时候的唯一条形码。来作为设备的 设备的ID, 去掉 01_qt_qml_client 设置功能的 设备ID 能够通过扫码枪来获取。
+获取的基本信息按钮功能，新增当开启软件时候，弹出设置功能时候。执行一次。并将获取的基本信息填写到输入框中，触发条件为 弹出设置框就触发。
+链路是 QML 设置弹窗 -> Qt ViewModel -> HTTP 注册到 python_api -> MySQL 保存设备 -> python_api 返回 MQTT 配置 -> Qt 通过本地 WebSocket 同步给 agent -> Qt/agent 写本地共享配置文件 
+设置当点击了确认后，在 Mysql 保存设备后。则新增一个标识。后端04_web_admin_vue 当获取到这个标识后, 则弹出详情页面。弹出这个页面的话，可以做成同步的。效果是qt 发送请求后，后端页面就打开。数据是从数据库中获取的。
+这个弹出详情框，走异步的功能吧。要不流程太长了。和保存配置交集在一起。可以设计一个方案。来监听这个标识，有标识的话，则弹出详情信息页面。需要设计数据库的话，则新增数据库，记录这次的任务。设备是唯一的。唯一标识即扫描到的设备ID.
 
+功能是获取到的基本信息详情页面，对应的详情信息，有 API 主机，API 端口，设备ID, 设备名称， 位置。 BurnInTest 输入框，其中这些信息都显示。鼠标自动进入到 设备ID 这一项。
+这个时候，扫码枪会自动扫码，将设备ID 同步到输入框中。
+当获取到了 设备ID 输入框的时候，则进入新的流程。python_api websocket 推送01_qt_qml_client，推送的iP是 设备ip. 设备ID 配置 -> Qt 通过本地 WebSocket 同步给 agent -> Qt/agent 更新本地共享配置文件，注意：python_api websocket 推送01_qt_qml_client 设备ID 配置 后，01_qt_qml_client判断是否打开设置页面，如果打开的话，则更新设备ID，到输入框中。如果没有打开设置页面，则继续走下面流程即可。
+
+ QML 设置弹窗 -> Qt ViewModel -> HTTP 注册到 python_api -> MySQL 保存设备 -> python_api 返回 MQTT 配置 -> Qt 通过本地 WebSocket 同步给 agent -> Qt/agent 写本地共享配置文件 这个链路中间新增了一个扫码获取设备ID 的动作。并同步到qt和agent 两个服务。原因是服务器连接扫码枪，代测试的设别有很多。就是将每个设备的ID 通过先获取到设备的 IP,然后将 设备 ID 不用手动输入到设备中。因为设备和扫码枪没有连接，当服务器作为代理传递设备ID。
+ 
+ 这次需求代码不要和之前的放到一个文件中，新开启一个文件，能复用之前代码则复用，单独做这个需求。这个项目都是的。
 
 ```
 
@@ -499,9 +468,63 @@ Copy-Item .env.example .env
 .\scripts\run_dev.ps1
 
 
+TDD 红灯：先写测试，构建因缺少 services/ActivationGuard.h 失败。
+ctest --test-dir 01_qt_qml_client\build --output-on-failure：1/1 通过。
+cmake --build 01_qt_qml_client\build --target aging_qt_client：通过。
+package_qt_client.ps1 -SkipWindeployQt：通过，package 内已复制 libcrypto-3-x64.dll
+
+
 
 
 ```
+
+
+
+# 服务器启动命令
+
+```
+启动 agent 
+cd E:\WorkSpace\CRM\build\CRMStressStation\agent
+.\aging-agent.exe --console --config .\config\agent_config.json
+
+
+sudo mkdir -p /srv/crm
+sudo chown -R boot:boot /srv/crm
+tar -xzf /tmp/crm-ubuntu-deploy.tar.gz -C /srv/crm
+
+cd /srv/crm/deploy/ubuntu
+cp -n .env.example .env
+chmod +x scripts/crm.sh
+nano .env
+
+./scripts/crm.sh config
+./scripts/crm.sh up
+./scripts/crm.sh ps
+./scripts/crm.sh health
+
+
+cd /srv/crm/deploy/ubuntu
+
+set -a
+. ./.env
+set +a
+
+docker exec -e INFLUX_TOKEN="$INFLUX_TOKEN" crm-influxdb-1 \
+  influx bucket list \
+  --host http://localhost:8086 \
+  --org "$INFLUX_ORG" \
+  --name "$INFLUX_BUCKET"
+
+BUCKET_ID="这里填写真实Bucket ID"
+docker exec -e INFLUX_TOKEN="$INFLUX_TOKEN" crm-influxdb-1 \
+  influx bucket update \
+  --host http://localhost:8086 \
+  --id "$BUCKET_ID" \
+  --retention 7d
+  
+```
+
+
 
 
 
