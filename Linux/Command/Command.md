@@ -74,6 +74,15 @@ scp -r root@192.168.1.100:/var/log /home/user/
 
 
 
+# du
+
+```
+# Ubuntu 查看当前目录一级的文件大小
+sudo du -xhd1 / 2>/dev/null | sort -h
+```
+
+
+
 # micorcom
 
 ```
@@ -165,6 +174,16 @@ sudo lsof -i :80
 adb shell 
 dumpsys webviewupdate 
 adb shell 进入，再输入pm list packages | grep webview
+
+# 安卓连接 adb 
+setprop service.adb.tcp.port 5555
+stop adbd
+start adbd
+
+# 安卓连接 adb windows 连接。
+.\adb.exe connect 192.168.26.191:5555
+.\adb.exe devices
+.\adb.exe shell
 ```
 
 # Node
@@ -359,6 +378,35 @@ hwclock -s
 
 
 
+# vim
+
+```
+LANG=zh_CN.UTF-8 vimtutor
+
+** 设置可使查找或者替换可忽略大小写的选项 **
+
+  1. 要查找单词 ignore 可在正常模式下输入 /ignore <回车>。
+     要重复查找该词，可以重复按 n 键。
+
+  2. 然后设置 ic 选项(Ignore Case，忽略大小写)，请输入： :set ic
+
+  3. 现在可以通过键入 n 键再次查找单词 ignore。注意到 Ignore 和 IGNORE 现在
+     也被找到了。
+
+  4. 然后设置 hlsearch 和 incsearch 这两个选项，请输入： :set hls is
+
+  5. 现在可以再次输入查找命令，看看会有什么效果： /ignore <回车>
+
+  6. 要禁用忽略大小写，请输入： :set noic
+
+提示：要移除匹配项的高亮显示，请输入：  :nohlsearch 或者 set:nohlsearch
+提示：如果您想要仅在一次查找时忽略字母大小写，您可以使用 \c：
+      /ignore\c <回车>
+
+```
+
+
+
 # GStreamer
 
 ```
@@ -372,3 +420,15 @@ gst-inspect-1.0 |grep mpp
 ![image-20260411170509728](./assets/image-20260411170509728.png)
 
 ```
+
+
+
+# 压力测试
+
+```
+sudo stress --cpu 8 --vm 13 --vm-bytes 1G
+watch -n 2 sensors
+htop
+sudo badblocks -v -s /dev/mmcblk0 
+```
+

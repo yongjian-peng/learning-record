@@ -286,5 +286,22 @@ CPU 原有保护测试不破坏
 跑 agent_core_tests
 确认现有 BurnInTest 测试仍通过
 检查日志中能看到资源保护触发原因
+
+温度采集:
+十二、目前尚未真正实现的功能
+下面这些当前仍未实现，或只是部分支持：
+Intel GPU Windows 原生真实使用率、温度和功耗；
+NVMe/ATA SMART 原生磁盘温度；
+磁盘健康度、寿命、坏块、Media Error；
+每块物理磁盘独立读写速度；
+风扇转速；
+主板温度；
+电压；
+内存温度；
+ECC 错误；
+进程列表和单进程 CPU/内存；
+HTTPS SensorBridge；
+使用 PCI/LUID/UUID 统一多 GPU 映射。
+ProcessCollector 当前只补充 performance.status=idle，并不采集真实进程列表
 ```
 
