@@ -433,6 +433,10 @@ cd E:\WorkSpace\CRM
 # 编译并启动全部项目
 .\scripts\dev.ps1 -Action dev -Target all
 
+.\scripts\dev.ps1 -Action agent-package
+
+.\scripts\dev.ps1 -Action station-package
+
 
 # 搜索日志命令 启动或者关闭命令
 Select-String -Path "03_backend_python_api\logs\*.log","02_agent_core_cpp\logs\*.log","C:\ProgramData\CRMStressPlatform\logs\*.log" -Pattern "cmd-xxxx"
