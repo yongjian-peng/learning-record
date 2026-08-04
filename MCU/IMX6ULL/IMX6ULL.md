@@ -17,5 +17,11 @@
 设置芯片 PLL 各路时钟的初始化。（时钟树的路径讲解。拆分）
 
 设置 复位中断 和 IRQ 中断
+	中断向量偏移设置
+	GIC寄存器，访问CPU接口端的基地址
 ```
+
+![image-20260728202631118](E:\Git\learning-record\MCU\IMX6ULL\assets\image-20260728202631118.png)
+
+![image-20260728202831686](E:\Git\learning-record\MCU\IMX6ULL\assets\image-20260728202831686.png)
 
