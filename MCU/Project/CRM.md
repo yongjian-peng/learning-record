@@ -113,10 +113,13 @@ LibreHardwareMonitor 或 SensorBridge
 → TemperatureCollector
 → disks.physical[]
 当前没有实现 NVMe SMART、ATA SMART 或 Windows Storage Reliability 的原生温度读取。
-80. 离线版的 当设别安装后，然后重启的话， agent_core 是默认开机自启动的。这个改成不是开机自启动的，当点击了 CRMStressPlatform.cmd 然后再启动，当关闭了 aging_qt_client.exe 后，所有相关的服务都要关闭了。包含启动的 aida64 和 burnintest 
+80. 离线版的 当设别安装后，然后重启的话， agent_core 是默认开机自启动的。这个改成不是开机自启动的，当点击了 CRMStressPlatform.cmd 然后再启动，当关闭了 aging_qt_client.exe 后，所有相关的服务都要关闭了。包含启动的 aida64 和 burnintest OK 
 81. 目前当开启了 lcd.exe 运行时候，lcd.exe 是全屏覆盖。颜色轮播。从服务器发送关闭 aida64 就是失效的。目前后端发送操作 aida64 还是存在失败的情况，这个案例的数据库记录的是 command result timeout  修复这个问题。
-82. 后台首页 echart 图 批次设备分布 每个区间的数字 0 20万 ... 和目前逻辑不对应。修复这个数字区间问题。 
-83.
+82. 后台首页 echart 图 批次设备分布 每个区间的数字 0 20万 ... 和目前逻辑不对应。修复这个数字区间问题。 OK
+83. 后端发布了开始老化，结束老化，关闭软件。qt_qml_client 是执行了对应的动作，但是数据库中 task-8399784f10f3 记录的数据是AIDA64 task was not found: task-8399784f10f3 然后再 qt_qml_client 手动执行了 开始老化，运行时间50秒  task-a4d8f1c5d33f  老化时间记录的也不对，0h 21m 11s 错误信息 AIDA64 task was not found: task-a4d8f1c5d33f， 这个问题，小心谨慎修复。不要引入了其他的bug. 我理解是，状态机的轮询记录，时间点的区间范围，目前是事件成功的。但是数据记录的不准确。
+84. 设备轮播了 lcd 颜色背景，鼠标左键和右键一致轮询，每隔 lcdClickIntervalMs  时间更新一次鼠标事件。新加入显示qt_qml_client 的页面。可以按照 每轮鼠标左键10完成后，转换成显示qt_qml_client 页面lcdClickIntervalMs 时间 ，再次进行鼠标右键的轮询。鼠标轮询一轮结束后，再次显示 qt_qml_client 页面lcdClickIntervalMs 时间，然后再次显示鼠标轮询。切换的话，可以按照模拟 esc 按键 实现退出效果。再次进入 lcd 的话，则再次开启 lcd。 记录好鼠标左键和右键和显示qt_qml_client 状态。当时真的收到了 esc 键盘的事件的话，则退出轮询。不再轮序，区分模拟 esc 和 实际的 esc 的检测。要不停止不了轮询。
+85. windows 7 windows 11 兼容
+86. ubuntu 系统 编译
 
 
 

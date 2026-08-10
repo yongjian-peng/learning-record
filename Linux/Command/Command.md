@@ -1,3 +1,23 @@
+
+
+
+
+# lspci
+
+```
+lspci -vvv -s 03:00.0 # 03.00.0 是 lspci 中的第一列数值
+```
+
+
+
+# RK3588
+
+```
+tr -d '\0' < /proc/device-tree/compatible 查看型号
+```
+
+
+
 # Ponytail  AI编程助手
 
 ```
