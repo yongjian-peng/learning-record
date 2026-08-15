@@ -76,6 +76,7 @@ file:///C:/Users/admin/.codex/visualizations/2026/07/14/019f6052-7421-7010-ba5b-
 - 连接服务器时候，注意开始老化，结束老化，和关闭软件的功能。不能失效。
 - 不连接服务器时候，数据保存到本地。当连接到服务器后，数据能正常和服务器通信，消息发送和订阅。
 - 不连接服务器时候，注意开始老化，结束老化，和关闭软件的功能。不能失效。
+- 不要影响到基本数据采集，和实时数据采集的逻辑。
 ```
 
 # 待完成的需求：
@@ -120,6 +121,8 @@ LibreHardwareMonitor 或 SensorBridge
 84. 设备轮播了 lcd 颜色背景，鼠标左键和右键一致轮询，每隔 lcdClickIntervalMs  时间更新一次鼠标事件。新加入显示qt_qml_client 的页面。可以按照 每轮鼠标左键10完成后，转换成显示qt_qml_client 页面lcdClickIntervalMs 时间 ，再次进行鼠标右键的轮询。鼠标轮询一轮结束后，再次显示 qt_qml_client 页面lcdClickIntervalMs 时间，然后再次显示鼠标轮询。切换的话，可以按照模拟 esc 按键 实现退出效果。再次进入 lcd 的话，则再次开启 lcd。 记录好鼠标左键和右键和显示qt_qml_client 状态。当时真的收到了 esc 键盘的事件的话，则退出轮询。不再轮序，区分模拟 esc 和 实际的 esc 的检测。要不停止不了轮询。
 85. windows 7 windows 11 兼容
 86. ubuntu 系统 编译
+87. 当没有网络的时候，则 ip 地址，设备ID 可以先不填写。当有网络的时候，则可以修改未同步的数据的设备ID. 如果已经同步到了服务器的话，不能修改服务器的设备ID 只能修改本地数据的 设备ID. 服务器的设备ID，只能有服务器端来修改设备ID。
+88. 
 
 
 
@@ -624,6 +627,87 @@ package_qt_client.ps1 -SkipWindeployQt：通过，package 内已复制 libcrypto
 
 
 
+
+
+
+
+
+```
+
+
+
+# 打包 Windows7,Windows10 命令
+
+```
+安装命令
+Windows 10，管理员 PowerShell：
+cd C:\CRMStressStation-Windows10
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+    -File .\install_station.ps1 `
+    -InstallRoot 'C:\Program Files\CRMStressPlatform'
+Windows 7，管理员 PowerShell：
+cd C:\CRMStressStation-Windows7
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+    -File .\install_station_windows7.ps1 `
+    -InstallRoot 'C:\Program Files\CRMStressPlatform'
+两个安装器默认只完成安装和快捷方式创建，不自动启动软件。
+绿色包直接启动命令
+这些命令只用于未安装绿色包的兼容启动或故障诊断。安装后无需再输入。
+Windows 10：
+cd C:\CRMStressStation-Windows10
+.\CRMStressPlatform.cmd
+Windows 7：
+cd C:\CRMStressStation-Windows7
+.\CRMStressPlatform.cmd
+管理员直接执行 CRMStressPlatform.cmd 的原有方式继续兼容。
+禁止使用：
+powershell.exe -File .\CRMStressPlatform.cmd
+因为 -File 只能运行 .ps1。
+生成 Windows 10 绿色包
+在 Windows 10 构建机执行：
+cd E:\WorkSpace\CRM
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+    -File .\scripts\dev.ps1 `
+    -Action station-package
+输出：
+E:\WorkSpace\CRM\build\CRMStressStation
+生成 Windows 7 绿色包
+先生成上述 Windows 10 包，Windows 7 包会复用其中已验证的 Agent。
+cd E:\WorkSpace\CRM\01_qt_qml_client
+
+$env:PATH='E:\Qt\Qt5.12\Tools\mingw810_64\bin;E:\Qt\Qt5.12\5.15.2\mingw81_64\bin;E:\Qt\Qt5.12\Tools\Ninja;' + $env:PATH
+
+& 'E:\Qt\Qt5.12\Tools\CMake_64\bin\cmake.exe' `
+    -S . `
+    -B build-win7 `
+    -G Ninja `
+    -DCMAKE_PREFIX_PATH='E:\Qt\Qt5.12\5.15.2\mingw81_64'
+
+& 'E:\Qt\Qt5.12\Tools\CMake_64\bin\cmake.exe' `
+    --build build-win7
+
+& 'E:\Qt\Qt5.12\Tools\CMake_64\bin\ctest.exe' `
+    --test-dir build-win7 `
+    --output-on-failure
+cd E:\WorkSpace\CRM
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+    -File .\01_qt_qml_client\scripts\package_qt_client.ps1 `
+    -OutputPath .\build\qt-client-windows7 `
+    -ExePath .\01_qt_qml_client\build-win7\bin\aging_qt_client.exe `
+    -AppSettingsPath .\01_qt_qml_client\build-win7\bin\appsettings.json `
+    -QtBinPath 'E:\Qt\Qt5.12\5.15.2\mingw81_64\bin' `
+    -MinGwBinPath 'E:\Qt\Qt5.12\Tools\mingw810_64\bin' `
+    -LibCryptoPath 'C:\Program Files\Git\mingw64\bin\libcrypto-3-x64.dll'
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+    -File .\scripts\package_station.ps1 `
+    -OutputPath .\build\CRMStressStation-Windows7 `
+    -AgentPackagePath .\build\CRMStressStation\agent `
+    -ClientPackagePath .\build\qt-client-windows7
 ```
 
 
@@ -720,6 +804,35 @@ EMQX_DASHBOARD_PORT=18083
 EMQX_DASHBOARD_USERNAME=admin
 EMQX_DASHBOARD_PASSWORD=public123456
 EMQX_NODE_COOKIE=crm_emqx_cookie_change_me
+```
+
+
+
+# Ubuntu 信息
+
+```
+20.04 x86 
+boot@boot-virtual-machine:~$ uname -a
+Linux boot-virtual-machine 5.15.0-139-generic #149~20.04.1-Ubuntu SMP Wed Apr 16 08:29:56 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+boot@boot-virtual-machine:~$ uname -r
+5.15.0-139-generic
+boot@boot-virtual-machine:~$ cat /etc/os-release 
+NAME="Ubuntu"
+VERSION="20.04.3 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.3 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+
+
+
+
 ```
 
 
