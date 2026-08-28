@@ -299,6 +299,19 @@ git merge origin/master --allow-unrelated-histories
 git push origin main
 
 
+git 变基
+git fetch origin
+git log --oneline --graph --decorate --all -20
+git pull --rebase origin master
+git push origin master
+
+
+本地只有 main，远程已经有 origin/master，所以直接从远程 master 创建本地 master，并建立跟踪关系即可
+git fetch origin
+
+git switch -c master --track origin/master
+
+
 ```
 
 
@@ -451,4 +464,39 @@ watch -n 2 sensors
 htop
 sudo badblocks -v -s /dev/mmcblk0 
 ```
+
+# Codex
+
+```
+# Shell
+codex
+codex --help
+codex --version
+codex -C <目录>
+codex -i <图片>
+codex resume
+codex resume --last
+codex fork
+codex exec
+codex review
+codex doctor
+codex update
+codex plugin list
+codex plugin add
+codex mcp
+
+Codex 里面
+/init
+/status
+/model
+/permissions
+/review
+/skills
+/plugins
+/compact
+/fork
+/exit
+```
+
+
 

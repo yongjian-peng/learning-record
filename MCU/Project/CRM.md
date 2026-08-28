@@ -122,7 +122,9 @@ LibreHardwareMonitor 或 SensorBridge
 85. windows 7 windows 11 兼容
 86. ubuntu 系统 编译
 87. 当没有网络的时候，则 ip 地址，设备ID 可以先不填写。当有网络的时候，则可以修改未同步的数据的设备ID. 如果已经同步到了服务器的话，不能修改服务器的设备ID 只能修改本地数据的 设备ID. 服务器的设备ID，只能有服务器端来修改设备ID。
-88. 
+88. 最新的当开启了压力测试软件后，手动关闭拷机软件，压力测试软件关闭不了，存在了新的bug . 
+89. 拷机系统，运行了比较久的时间，插上鼠标和键盘2分钟后，才可以使用，很卡，关闭压力测试软件，响应也很慢。日志 logs-kadun 时间是 9:24 
+90. 
 
 
 
@@ -418,6 +420,91 @@ Qt/QML 客户端、Vue 管理端显示
 
 
 
+# Ubuntu 启动命令
+
+```
+未能完成“所有要求并通过发布门禁”，但已完成 Ubuntu x86_64 的首轮编译打通；不能把未实现的 Linux 采集、ARM64、Ubuntu 20.04 和真
+  实硬件验证伪装成完成。
+
+  已修改：
+
+  - 02_agent_core_cpp/CMakeLists.txt
+      - 移除 GLOB_RECURSE
+      - 显式平台源文件选择
+      - 接入 Threads::Threads、${CMAKE_DL_LIBS}
+      - 增加 install 规则
+      - 支持固定 SQLite 源码包或系统 SQLite
+
+  - 02_agent_core_cpp/src/performance/LinuxPerformanceRunner.cpp
+      - 未配置时明确返回 runner_not_configured
+      - 不再伪装环境可用
+
+  - 02_agent_core_cpp/src/collectors/BasicInfoCollector.cpp
+      - 按编译目标选择 adapter
+
+  - 02_agent_core_cpp/src/alarm/AlarmEventReporter.cpp
+      - 修复 Linux int64_t JSON 编译歧义
+
+  - 01_qt_qml_client/CMakeLists.txt
+      - Linux 不再依赖 lcd.exe
+      - 增加 Qt install/deploy
+
+  - 01_qt_qml_client/src/services/LcdDisplayController.cpp
+      - Linux 明确返回 LCD unavailable，不调用 WinAPI
+
+  编译结果：
+
+  cmake -S 02_agent_core_cpp -B /tmp/crm-agent-build -DCMAKE_BUILD_TYPE=Debug
+  cmake --build /tmp/crm-agent-build -j2
+
+  cmake -S 01_qt_qml_client -B /tmp/crm-qt-build \
+
+  /tmp/crm-agent-build/bin/aging-agent
+  /tmp/crm-qt-build/bin/aging_qt_client
+
+  剩余门禁：
+
+  - Agent：local_data_tests 通过；核心测试仍有 3 项失败，其中两项确认源于 LinuxAdapter 仍返回 stub basic-info。
+  - Qt：85 通过、3 失败、2 跳过；失败均为 Windows 路径分隔符断言。
+  - 尚未实现真实 /proc、sysfs、DMI、hwmon、NVML Linux adapter。
+  - 尚未实现 supervisor/systemd user scope、完整 Linux 压力 profile/cgroup 生命周期。
+  - 尚未完成 Ubuntu 20.04、ARM64、绿色包、真实硬件及 Windows 回归。
+  - 官方 SQLite 3.53.3 源码包下载到了 /home/boot/WorkSpace/CRM/third-party/，未纳入子项目 Git。
+
+  因此当前只能认定“Ubuntu x86_64 编译通过”，不能认定满足全部跨平台发布要求。
+  
+  
+  
+  根因：
+
+  1. Qt 授权失败并非证书损坏。源证书与手工复制文件 SHA-256 完全一致。真实错误是 Linux 下 ActivationGuard 只尝试加载 Windows 的
+     libcrypto-*.dll，没有尝试系统 libcrypto.so.3。
+
+  2. Qt CMake 当前只复制 appsettings.json，没有复制 activation.lic。
+  3. Agent 默认按当前工作目录读取 config/agent_config.json。因此从 CRM 根目录执行绝对路径会失败；进入 /tmp/crm-agent-build/bin
+     后可以找到已复制的配置。
+
+  4. QML 警告来自 Theme.qml 使用已弃用的 Qt.labs.settings，Qt 6.10 应改用 QtCore.Settings。
+
+  计划：
+
+  1. 先增加最小失败验证，覆盖 Linux OpenSSL 加载、构建后证书/配置存在，以及 Agent 从任意工作目录启动。
+  2. Qt CMake 将 activation.lic 与 appsettings.json 同步到可执行文件目录；安装包也放在 bin/，与现有运行时查找规则一致。
+  5. Agent 显式 --config 行为保持不变；未指定时从可执行文件旁的 config/agent_config.json 读取。CMake 构建时同步现有 config/
+     agent_config.json 到 bin/config/。
+
+  6. 在根目录新增 docs/ubuntu-build-package.md，写明 Ubuntu 配置、编译、测试、安装、Qt 部署和 tar.gz 打包命令。
+  7. 重新构建并验证：
+      - Qt 无弃用警告且授权检查通过。
+      - Agent 从 CRM 根目录以绝对路径启动时不再报配置缺失。
+      - 运行两个项目相关测试。
+      - 执行 cmake --install 并检查包内证书、配置和 Qt 运行库。
+```
+
+
+
+
+
 # 启动命令
 
 ```
@@ -665,6 +752,8 @@ cd C:\CRMStressStation-Windows7
 禁止使用：
 powershell.exe -File .\CRMStressPlatform.cmd
 因为 -File 只能运行 .ps1。
+
+
 生成 Windows 10 绿色包
 在 Windows 10 构建机执行：
 cd E:\WorkSpace\CRM
@@ -847,6 +936,15 @@ http://192.168.31.224:9008/crm/backend-python-api.git
 http://192.168.31.224:9008/crm/agent-core-cpp.git
 
 http://192.168.31.224:9008/crm/qt-qml-client.git
+
+
+git clone git@192.168.31.224:crm/qt-qml-client.git 01_qt_qml_client
+
+git clone git@192.168.31.224:crm/agent-core-cpp.git 02_agent_core_cpp
+
+git clone git@192.168.31.224:crm/backend-python-api.git 03_backend_python_api
+
+git clone git@192.168.31.224:crm/web-admin-vue.git 04_web_admin_vue
 
 
 curl.exe "http://127.0.0.1:8000/api/telemetry/latest/你的deviceId"
