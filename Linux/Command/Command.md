@@ -2,6 +2,14 @@
 
 
 
+# Ubuntu 查看 桌面
+
+```
+echo $XDG_CURRENT_DESKTOP
+```
+
+
+
 # lspci
 
 ```

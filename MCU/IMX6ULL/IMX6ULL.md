@@ -1,3 +1,11 @@
+# 空间分布
+
+常用地址分布
+
+![image-20260903203847086](E:\Git\learning-record\MCU\IMX6ULL\assets\image-20260903203847086.png)
+
+
+
 # 逻辑开发
 
 ```
