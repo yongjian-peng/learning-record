@@ -289,6 +289,10 @@ git add .
 git commit -m"init"
 git push -u origin master => git push --set-upstream origin master
 
+git fetch origin
+git pull --no-rebase origin master --allow-unrelated-histories
+
+
 git remote add origin  http://192.168.31.224:9008/crm/backend-python-api.git
 
 

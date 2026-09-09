@@ -4,6 +4,10 @@
 
 # 设置 bios
 
+先用键盘 `↑ ↓`，把高亮光标移动到：
+
+然后按：+ 
+
 ![image-20260828131548329](E:\Git\learning-record\Linux\Tools\assets\image-20260828131548329.png)
 
 
