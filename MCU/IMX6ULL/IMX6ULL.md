@@ -1,3 +1,41 @@
+# 空间分布
+
+常用地址分布
+
+![image-20260903203847086](E:\Git\learning-record\MCU\IMX6ULL\assets\image-20260903203847086.png)
+
+# 启动流程
+
+```
+CPU上电复位
+    ↓
+执行芯片内部Boot ROM
+    ↓
+检测BOOT_MODE和启动设备
+    ↓
+确定从SD卡启动
+    ↓
+Boot ROM初始化USDHC
+    ↓
+读取SD卡最初4 KiB到片内OCRAM
+    ↓
+找到IVT
+    ↓
+根据IVT找到DCD
+    ↓
+执行DCD，初始化DDR
+    ↓
+读取Boot Data
+    ↓
+把完整镜像从SD卡搬到DDR
+    ↓
+跳转到IVT.entry
+    ↓
+开始执行用户程序
+```
+
+
+
 # 逻辑开发
 
 ```

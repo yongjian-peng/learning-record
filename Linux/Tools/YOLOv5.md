@@ -32,3 +32,11 @@ https://doc.sophgo.com/sdk-docs/v26.03.01/docs_latest_release/docs/libsophon/gui
 
 ![image-20260703093335995](E:\Git\learning-record\Linux\Tools\assets\image-20260703093335995.png)
 
+# 算立卡种类
+
+```
+hailo算力卡
+```
+
+
+
