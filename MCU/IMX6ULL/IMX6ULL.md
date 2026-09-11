@@ -1,3 +1,58 @@
+# 安装工具
+
+```
+NFS 服务开启
+sudo apt-get install nfs-kernel-server rpcbind
+使用如下命令打开 nfs 配置文件/etc/exports：
+sudo vi /etc/exports
+
+打开/etc/exports 以后在后面添加如下所示内容：
+/home/zuozhongkai/linux/nfs *(rw,sync,no_root_squash)
+重启 NFS 服务，
+sudo /etc/init.d/nfs-kernel-server restart
+
+SSH 服务开启
+ sudo apt-get install openssh-server
+
+/******************************************************************************************************/
+tftp 服务
+sudo apt-get install tftp-hpa tftpd-hpa
+sudo apt-get install xinetd
+mkdir /home/zuozhongkai/linux/tftpboot
+chmod 777 /home/zuozhongkai/linux/tftpboot
+安装完成以后新建文件/etc/xinetd.d/tftp
+server tftp
+{
+	socket_type = dgram
+	protocol = udp
+	wait = yes
+	user = root
+	server = /usr/sbin/in.tftpd
+	server_args = -s /home/zuozhongkai/linux/tftpboot/
+	disable = no
+	per_source = 11
+	cps = 100 2
+	flags = IPv4
+}
+
+完了以后启动 tftp 服务， sudo service tftpd-hpa start
+打开/etc/default/tftpd-hpa 文件，将其修改为如下所示内容：
+# /etc/default/tftpd-hpa
+
+TP_USERNAME="tftp"
+TFTP_DIRECTORY="/home/zuozhongkai/linux/tftpboot"
+TFTP_ADDRESS=":69"
+TFTP_OPTIONS="-l -c -s"
+
+最后重启服务
+sudo service tftpd-hpa restart
+
+
+tar -vxjf uboot-imx-rel_imx_4.1.15_2.1.0_ga.tar.bz2
+```
+
+
+
 # 空间分布
 
 常用地址分布
