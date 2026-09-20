@@ -212,6 +212,9 @@ start adbd
 .\adb.exe connect 192.168.26.191:5555
 .\adb.exe devices
 .\adb.exe shell
+
+
+Start-Service sshd
 ```
 
 # Node
