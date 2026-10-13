@@ -1,3 +1,21 @@
+
+
+
+
+# 设置代理
+
+```
+export http_proxy=http://127.0.0.1:7897
+export https_proxy=http://127.0.0.1:7897
+export all_proxy=http://127.0.0.1:7897
+
+export HTTP_PROXY=$http_proxy
+export HTTPS_PROXY=$https_proxy
+export ALL_PROXY=$all_proxy
+```
+
+
+
 # 调整网络优先级
 
 ```

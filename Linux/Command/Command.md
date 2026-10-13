@@ -1,5 +1,12 @@
 
 
+# kernel config
+
+``
+
+zcat /proc/config.gz | grep -E \
+'CONFIG_USB_SERIAL=|CONFIG_USB_SERIAL_WWAN|CONFIG_USB_SERIAL_OPTION|CONFIG_USB_SERIAL_QUALCOMM'
+
 
 
 # Ubuntu 查看 桌面

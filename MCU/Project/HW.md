@@ -1,3 +1,46 @@
+重启网络 WIFI
+
+```
+另外，如果客户有复现到问题，可以用这个方式试验下能否恢复网络
+
+先ifconfig看下ip分配的情况
+
+然后sudo nmcli device reapply wlan0 || sudo nmcli connection up 你的wifi名称
+
+再ifconfig看下
+
+然后ping 223.5.5.5
+```
+
+
+
+# 查看开机记录
+
+```
+如果是更换其他路由器就没有问题，那么推测是原来的随身wifi的 DHCP有点问题，租期到了没有自动续租。
+
+journalctl --list-boots可以看到开关机的记录。找到哪一次是wifi掉的开机时间段，例如如果前面是-4，则以下面的方式抓取日志给我：
+
+journalctl -b -4 > -4.log
+```
+
+
+
+# 更改 DPI 
+
+```
+查看当前屏幕密度  
+wm density
+
+设置屏幕密度  
+wm density 640
+
+重置屏幕密度为默认  
+wm density reset
+```
+
+
+
 # 验证RK3588 stress 
 
 ![image-20260707150451435](E:\Git\learning-record\MCU\Project\assets\image-20260707150451435.png)
