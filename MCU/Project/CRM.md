@@ -132,7 +132,8 @@ LibreHardwareMonitor 或 SensorBridge
 87. 当没有网络的时候，则 ip 地址，设备ID 可以先不填写。当有网络的时候，则可以修改未同步的数据的设备ID. 如果已经同步到了服务器的话，不能修改服务器的设备ID 只能修改本地数据的 设备ID. 服务器的设备ID，只能有服务器端来修改设备ID。
 88. 最新的当开启了压力测试软件后，手动关闭拷机软件，压力测试软件关闭不了，存在了新的bug . 
 89. 拷机系统，运行了比较久的时间，插上鼠标和键盘2分钟后，才可以使用，很卡，关闭压力测试软件，响应也很慢。日志 logs-kadun 时间是 9:24 
-90. 
+90. ./scripts/linux/build-dev.sh 编译开发环境 03 python_api 关于数据连接有报错，测试跑不通。修复并验证03， 另外在加上 每个服务的 start 命令，开启服务。自测。并验证是否成功。给出命令说明。
+91.
 
 
 
@@ -431,6 +432,20 @@ Qt/QML 客户端、Vue 管理端显示
 # Ubuntu 启动命令
 
 ```
+
+CRM_ROOT=/home/boot/WorkSpace/CRM
+PYTHON_BIN=python3
+
+cd "$CRM_ROOT/03_backend_python_api"
+"$PYTHON_BIN" -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m compileall -q app scripts
+python -m pytest
+deactivate
+
+
 未能完成“所有要求并通过发布门禁”，但已完成 Ubuntu x86_64 的首轮编译打通；不能把未实现的 Linux 采集、ARM64、Ubuntu 20.04 和真
   实硬件验证伪装成完成。
 
