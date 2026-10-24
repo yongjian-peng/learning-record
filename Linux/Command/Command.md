@@ -13,6 +13,15 @@ zcat /proc/config.gz | grep -E \
 
 ```
 echo $XDG_CURRENT_DESKTOP
+
+启动时候，修改选项启动项 
+sudo cp -a /etc/default/grub \
+  /etc/default/grub.bak
+  
+ GRUB_TIMEOUT_STYLE=menu
+GRUB_TIMEOUT=15
+
+sudo update-grub
 ```
 
 
@@ -29,6 +38,7 @@ lspci -vvv -s 03:00.0 # 03.00.0 是 lspci 中的第一列数值
 
 ```
 tr -d '\0' < /proc/device-tree/compatible 查看型号
+tr -d '\0' < /proc/device-tree/model 查看型号 
 ```
 
 

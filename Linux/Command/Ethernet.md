@@ -1,3 +1,9 @@
+# 验证 DNS
+
+```
+getent ahostsv4 www.baidu.com
+```
+
 
 
 

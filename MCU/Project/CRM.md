@@ -876,6 +876,15 @@ cmd /c "mysql -u root -p crm < database\migrations\202607_telemetry_archive.sql"
 
 第二次全量同步应主要计入 ignored，MySQL 行数不再增加。确认幂等后，每天固定时间执行：
  .\.venv\Scripts\python.exe scripts\sync_telemetry_archive.py --mode incremental
+ 
+重新创建 ClickHouse 容器：
+sudo docker compose up -d --pull never --force-recreate clickhouse
+确认服务状态：sudo docker compose ps clickhouse
+sudo docker compose start clickhouse
+sudo docker compose stop clickhouse
+sudo docker compose restart clickhouse
+sudo docker compose ps clickhouse
+sudo docker compose logs --tail=100 clickhouse
 ```
 
 
