@@ -1,3 +1,35 @@
+# GPIO排查
+
+```
+sudo mount -t debugfs none /sys/kernel/debug 2>/dev/null || true
+查看 GPIO
+cat /sys/kernel/debug/gpio
+查看 Pinctrl：
+for f in /sys/kernel/debug/pinctrl/*/pinmux-pins; do
+    echo "========== $f =========="
+    grep -iE 'GPIO2_C5|pwm2' "$f"
+done
+查看 Pinctrl 配置：
+for f in /sys/kernel/debug/pinctrl/*/pinconf-pins; do
+    echo "========== $f =========="
+    grep -i 'GPIO2_C5' "$f"
+done
+
+```
+
+
+
+
+
+# 权限
+
+```
+建议采用 labg 管理组
+# 查看管理组
+getent group labg
+
+```
+
 
 
 # kernel config
@@ -194,6 +226,9 @@ npx skills list
 ```
  mvn clean package -DskipTests
  
+cd E:\WorkSpace\production-board\react-board-admin
+mvn -pl ruoyi-admin -am package -DskipTests
+ 
 ```
 
 
@@ -378,6 +413,17 @@ sudo gitlab-ctl tail
 
 配置地址
 external_url 'http://git.home.com:800'
+
+配置进程 
+puma['worker_processes'] = 2
+puma['min_threads'] = 4
+puma['max_threads'] = 4
+
+cli 
+/etc/gitlab-runner/config.toml
+gitlab-runner register  --url http://192.168.31.224:9008  --token glrt-9B_8aqHJRja78mFglStDVW86MQpwOnMKdDozCnU6MQ8.01.171pue32g
+rk-embedded-runner-01
+
 ```
 
 
@@ -429,6 +475,40 @@ docker ps
  docker compose -f docker-compose.yml -f docker-compose.libretranslate.yml up -d --build libretranslate
  
  docker compose -f docker-compose.yml -f docker-compose.libretranslate.yml restart libretranslate
+ 
+更新 Nginx 配置
+vim board/react/conf.d/default.conf
+
+docker exec board-react-web nginx -t
+
+docker exec board-react-web nginx -s reload
+
+
+更新 Java JAR
+cd /home/pyj/myproject/laradock
+
+# 备份当前版本
+cp -a board/java/package/app.jar \
+  board/java/package/app.jar.bak.$(date +%Y%m%d_%H%M%S)
+
+# 将新版本复制到临时文件
+cp /新版本路径/app.jar \
+  board/java/package/app.jar.new
+
+# 原子替换
+mv -f board/java/package/app.jar.new \
+  board/java/package/app.jar
+
+# 重启 Java
+docker compose restart board-java
+
+# 查看日志
+docker logs --tail=100 board-java
+
+
+docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+sudo docker cp rk3568-android11-build:/tmp/qy-rk3568-dts-audit.txt /home/pyj/docker-log/qy-rk3568-dts-audit.txt
+
 
 ```
 
